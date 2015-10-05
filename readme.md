@@ -1,7 +1,7 @@
 decorator-routes
 ================
 
-Enables better syntax when defining routes.
+A wrapper around existing routing libraries to enable better syntax by using decorators.
 
 ## Example
 
@@ -17,13 +17,13 @@ import {Note} from "./../models/note";
 @Use("/notes")
 export class NoteRoutes extends Routes {
     @Get("/:noteID")
-    async get(noteID: string) {
-        return await StorageFactory.createNoteStorage().get(noteID);
+    get(noteID: string) {
+        return StorageFactory.createNoteStorage().get(noteID);
     }
 
     @Post("/")
-    async post(note: Note) {
-        return await StorageFactory.createNoteStorage().post(note);
+    post(note: Note) {
+        return StorageFactory.createNoteStorage().post(note);
     }
 }
 ```
@@ -33,9 +33,10 @@ Then initialize all the routes:
 ```typescript
 // rough idea code
 import {Router} from "express";
-import {initializeForExpress} from "decorator-routes";
+import {initializeRoutes} from "decorator-routes-express";
 import {NoteRoutes} from "./note-routes";
 
 const router = express.Router();
-initializeForExpress(router, NoteRoutes);
+initializeRoutes(router, NoteRoutes);
+// use router here
 ```
