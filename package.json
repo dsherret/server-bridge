@@ -1,0 +1,24 @@
+{
+  "name": "decorator-routes",
+  "version": "1.0.0",
+  "description": "0.0.1",
+  "main": "dist/decorator-routes.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsherret/decorator-routes.git"
+  },
+  "keywords": [
+    "decorators",
+    "typescript",
+    "routes"
+  ],
+  "author": "David Sherret",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dsherret/decorator-routes/issues"
+  },
+  "homepage": "https://github.com/dsherret/decorator-routes#readme"
+}
