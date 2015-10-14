@@ -62,7 +62,7 @@ const clientSideCode = getGeneratedCode({
 After doing this, `clientSideCode` would contain the following code for use in a client-side file:
 
 ```typescript
-import {ClientBase } from "decorator-routes";
+import {ClientBase} from "decorator-routes";
 import {Note} from "shared-libs";
 
 export class NoteApi extends ClientBase {
