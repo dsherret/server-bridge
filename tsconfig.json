@@ -2,9 +2,23 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": true,
+        "declaration": false,
         "noImplicitAny":  true,
         "removeComments": true,
-        "experimentalDecorators": true
-    }
+        "experimentalDecorators": true,
+        "outDir": "dist",
+        "sourceMap": false
+    },
+    "files": [
+        "src/code-generator/get-generated-code.ts",
+        "src/code-generator/get-code-from-classes.ts",
+        "src/code-generator/get-classes.ts",
+        "src/get.ts",
+        "src/post.ts",
+        "src/use.ts",
+        "src/routes.ts",
+        "src/client-base.ts",
+        "src/main.ts",
+        "typings/tsd.d.ts"
+    ]
 }
