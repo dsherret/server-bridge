@@ -9,4 +9,3 @@ function getGeneratedCode(options) {
     return get_code_from_classes_1.getCodeFromClasses(classes, options.importMapping || {});
 }
 exports.getGeneratedCode = getGeneratedCode;
-console.log(getGeneratedCode({ importMapping: { Note: "shared-lib" } }, "test-file.ts"));
