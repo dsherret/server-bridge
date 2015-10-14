@@ -27,6 +27,8 @@
   "dependencies": {
     "type-info-ts": "https://github.com/dsherret/type-info-ts/tarball/master",
     "code-block-writer": "https://github.com/dsherret/code-block-writer/tarball/master",
-    "typescript": "^1.6.2"
+    "typescript": "^1.6.2",
+    "express": "~4.13.3",
+    "superagent": "^1.4.0"
   }
 }
