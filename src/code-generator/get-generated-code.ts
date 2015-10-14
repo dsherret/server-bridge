@@ -7,4 +7,4 @@ export function getGeneratedCode(options: { importMapping?: {[importName: string
     return getCodeFromClasses(classes, options.importMapping || {});
 }
 
-console.log(getGeneratedCode({ importMapping: { Note: "shared-lib" } }, "test-file.ts"));
+// console.log(getGeneratedCode({ importMapping: { Note: "shared-lib" } }, "test-file.ts"));
