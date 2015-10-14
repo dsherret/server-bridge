@@ -54,7 +54,8 @@ Client side code is generated automatically from the server side code.
 import {getGeneratedCode} from "decorator-routes";
     
 const clientSideCode = getGeneratedCode({
-    importMapping: { Note: "shared-lib" }
+    importMapping: { Note: "shared-lib" },
+    classMapping: { NoteRoutes: "NoteApi" }
 }, "note-routes.ts");
 ```
     
@@ -64,7 +65,7 @@ After doing this, `clientSideCode` would contain the following code for use in a
 import {ClientBase } from "decorator-routes";
 import {Note} from "shared-libs";
 
-export class NoteRoutes extends ClientBase {
+export class NoteApi extends ClientBase {
     constructor() {
         super("/notes");
     }
@@ -82,10 +83,10 @@ export class NoteRoutes extends ClientBase {
 Which could then be used in the client like so:
 
 ```typescript
-import {NoteRoutes} from "./server";
+import {NoteApi} from "./server";
 
-const noteRoutes = new NoteRoutes();
-noteRoutes.get(5).then((note) => {
+const notes = new NoteApi();
+notes.get(5).then((note) => {
     // use note here
 });
 ```
