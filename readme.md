@@ -3,31 +3,24 @@ decorator-routes
 
 A wrapper around existing routing libraries to enable better syntax by using decorators.
 
+This library is experimental and currently doesn't work exactly as explained here. So don't use it :)
+
 ## Example
+
+## Server Side
 
 Here's an example of what this might look like:
 
-Define a contract:
+Declare a route class that inherits from `Routes`:
 
 ```typescript
-import {Note} from "./../models/note";
-
-export interface INoteRoutes {
-	get(noteID: string): Promise<Note>;
-	set(note: Note): Promise<Note>;
-}
-```
-
-Declare a route class:
-
-```typescript
+// note-routes.ts
 import {Use, Get, Post, Routes} from "decorator-routes";
 import {StorageFactory} from "./../factories/storage-factory";
-import {Note} from "./../models/note";
-import {INoteRoutes} from "shared-libs";
+import {Note} from "shared-libs";
 
 @Use("/notes")
-export class NoteRoutes extends Routes implements INoteRoutes {
+export class NoteRoutes extends Routes {
     @Get("/:noteID")
     get(noteID: string) {
         return StorageFactory.createNoteStorage().get(noteID);
@@ -44,8 +37,8 @@ Then initialize all the routes:
 
 ```typescript
 // rough idea code
-import {Router} from "express";
-import {initializeRoutes} from "decorator-routes-express";
+import * as express from "express";
+import {initializeRoutes} from "decorator-routes";
 import {NoteRoutes} from "./note-routes";
 
 const router = express.Router();
@@ -53,4 +46,44 @@ initializeRoutes(router, NoteRoutes);
 // use router here
 ```
 
-Then the code that calls this will use the interface to have strong typing between the client and server. Need to think that out, but should be easy.
+## Client Side
+
+Client side code is generated automatically from the server side code.
+
+```typescript
+import {getGeneratedCode} from "decorator-routes";
+    
+const clientSideCode = getGeneratedCode({
+    importMapping: { Note: "shared-lib" }
+}, "note-routes.ts");
+```
+    
+After doing this, `clientSideCode` would contain the following code for use in a client-side file:
+
+```typescript
+import {ClientBase } from "decorator-routes";
+import {Note} from "shared-libs";
+
+export class NoteRoutes extends ClientBase {
+    constructor() {
+        super("/notes");
+    }
+
+    get(noteID: string) {
+        return this.get<Note>(`/${noteID}`);
+    }
+
+    set(note: Note) {
+        return this.post<Note>("/", note);
+    }
+}
+```
+
+Which could then be used in the client like so:
+
+import {NoteRoutes} from "./server";
+
+const noteRoutes = new NoteRoutes();
+noteRoutes.get(5).then((note) => {
+    // use note here
+});
