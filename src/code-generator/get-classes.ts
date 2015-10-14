@@ -1,4 +1,3 @@
-/// <reference path="../../node_modules/type-info-ts/dist/type-info-ts.d.ts" />
 import * as TSCode from "type-info-ts";
 
 const BASE_CLASS_NAME = "Routes";

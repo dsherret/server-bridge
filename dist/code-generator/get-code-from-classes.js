@@ -1,5 +1,3 @@
-/// <reference path="../../node_modules/code-block-writer/dist/code-block-writer.d.ts" />
-/// <reference path="../../node_modules/type-info-ts/dist/type-info-ts.d.ts" />
 var code_block_writer_1 = require("code-block-writer");
 function getCodeFromClasses(classes, importMapping) {
     var importWriter = new code_block_writer_1.default();

@@ -1,4 +1,3 @@
-/// <reference path="../typings/superagent/superagent.d.ts" />
 import * as request from "superagent";
 
 export class ClientBase {

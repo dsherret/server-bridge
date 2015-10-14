@@ -1,4 +1,3 @@
-/// <reference path="../typings/superagent/superagent.d.ts" />
 var request = require("superagent");
 var ClientBase = (function () {
     function ClientBase(baseUrl) {

@@ -1,4 +1,3 @@
-/// <reference path="../../node_modules/type-info-ts/dist/type-info-ts.d.ts" />
 var TSCode = require("type-info-ts");
 var BASE_CLASS_NAME = "Routes";
 function getClasses() {

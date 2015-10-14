@@ -1,6 +1,3 @@
-/// <reference path="../../node_modules/code-block-writer/dist/code-block-writer.d.ts" />
-/// <reference path="../../node_modules/type-info-ts/dist/type-info-ts.d.ts" />
-
 import CodeBlockWriter from "code-block-writer";
 import * as TSCode from "type-info-ts";
 
