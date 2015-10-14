@@ -81,9 +81,11 @@ export class NoteRoutes extends ClientBase {
 
 Which could then be used in the client like so:
 
+```typescript
 import {NoteRoutes} from "./server";
 
 const noteRoutes = new NoteRoutes();
 noteRoutes.get(5).then((note) => {
     // use note here
 });
+```
