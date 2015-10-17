@@ -53,7 +53,7 @@ initializeRoutes(router, NoteRoutes);
 
 ## Client Side
 
-Client side code is generated automatically from the server side code.
+Client side code can be generated automatically from the server side code.
 
 ```typescript
 import {getGeneratedCode} from "decorator-routes";
