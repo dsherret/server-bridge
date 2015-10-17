@@ -3,13 +3,18 @@ decorator-routes
 
 A wrapper around existing routing libraries to enable better syntax by using decorators.
 
-This library is experimental and currently doesn't work exactly as explained here. So don't use it :)
+This library is experimental and currently doesn't work exactly as explained here (needs a bit more work). **So don't use it yet!** :)
+
+## What will this library do?
+
+1. Help you write code on the server that listens to requests.
+2. Generate client-side code from this server side code to send requests to the server.
 
 ## Example
 
 ## Server Side
 
-Here's an example of what this might look like:
+Here's an example of what this might look like.
 
 Declare a route class that inherits from `Routes`:
 
