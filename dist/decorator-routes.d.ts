@@ -7,7 +7,7 @@ declare module "decorator-routes" {
     export function getGeneratedCode(options: { importMapping?: { [importName: string]: string; }; }, ...fileNames: string[]): string;
     export function Get(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(obj: Object) => Promise<any>>) => void;
     export function Post(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: Object) => Promise<any>>) => void;
-    export function Use(basePath?: string): (target: Routes) => void;
+    export function Use(basePath?: string): (target: typeof Routes) => void;
     export class Routes {
         router: express.Router;
         routeInitializations: Array<(instance: Routes) => void>;
