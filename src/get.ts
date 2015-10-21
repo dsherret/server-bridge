@@ -10,7 +10,9 @@ export function Get(route: string = null) {
 
             instance.router.get(instance.getPath(route), (req, res, next) => {
                 return descriptor.value(req.params).then((result) => {
-                    res.send(result);
+                    res.status(200);
+                    res.setHeader("Content-Type", "application/json");
+                    res.send(JSON.stringify(result));
                 }).catch(err => next(err));
             });
         });

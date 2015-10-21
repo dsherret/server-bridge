@@ -9,7 +9,9 @@ function Post(route) {
             instance.router.post(instance.getPath(route), function (req, res, next) {
                 var sentObject = req.body;
                 return descriptor.value(sentObject).then(function (result) {
-                    res.send(result);
+                    res.status(200);
+                    res.setHeader("Content-Type", "application/json");
+                    res.send(JSON.stringify(result));
                 }).catch(function (err) { return next(err); });
             });
         });

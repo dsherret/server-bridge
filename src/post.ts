@@ -12,7 +12,9 @@ export function Post(route: string = null) {
                 const sentObject = req.body;
 
                 return descriptor.value(sentObject).then((result) => {
-                    res.send(result);
+                    res.status(200);
+                    res.setHeader("Content-Type", "application/json");
+                    res.send(JSON.stringify(result));
                 }).catch(err => next(err));
             });
         });
