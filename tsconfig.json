@@ -10,15 +10,20 @@
         "sourceMap": false
     },
     "files": [
+        "src/code-generator/class-writer.ts",
         "src/code-generator/get-generated-code.ts",
         "src/code-generator/get-code-from-classes.ts",
+        "src/code-generator/get-request-path.ts",
+        "src/code-generator/get-method-decorator.ts",
+        "src/code-generator/get-class-path.ts",
         "src/code-generator/get-classes.ts",
+        "src/code-generator/types-dictionary.ts",
+        "src/typings/tsd.d.ts",
         "src/get.ts",
         "src/post.ts",
         "src/use.ts",
         "src/routes.ts",
         "src/client-base.ts",
-        "src/main.ts",
-        "typings/tsd.d.ts"
+        "src/main.ts"
     ]
 }
