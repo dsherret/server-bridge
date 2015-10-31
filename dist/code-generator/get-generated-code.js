@@ -6,6 +6,7 @@ function getGeneratedCode(options) {
         fileNames[_i - 1] = arguments[_i];
     }
     var classes = get_classes_1.getClasses.apply(void 0, fileNames);
-    return get_code_from_classes_1.getCodeFromClasses(classes, options.importMapping || {});
+    var importMapping = options.importMapping, _a = options.libraryName, libraryName = _a === void 0 ? "decorator-routes" : _a;
+    return get_code_from_classes_1.getCodeFromClasses({ classes: classes, importMapping: importMapping || {}, libraryName: libraryName });
 }
 exports.getGeneratedCode = getGeneratedCode;

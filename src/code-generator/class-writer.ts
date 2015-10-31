@@ -33,6 +33,7 @@ export class ClassWriter {
 
     private writeMethods(writer: CodeBlockWriter) {
         this.classDef.methods.forEach((method) => {
+            writer.newLine();
             this.writeMethod(writer, method)
         });
     }

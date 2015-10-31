@@ -17,6 +17,10 @@ export class TypesDictionary {
         }
     }
 
+    getTypesAsArray() {
+        return Object.keys(this.types).map(prop => this.types[prop]);
+    }
+
     getTypes() {
         return this.types;
     }

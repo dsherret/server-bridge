@@ -29,6 +29,7 @@ var ClassWriter = (function () {
     ClassWriter.prototype.writeMethods = function (writer) {
         var _this = this;
         this.classDef.methods.forEach(function (method) {
+            writer.newLine();
             _this.writeMethod(writer, method);
         });
     };

@@ -12,6 +12,10 @@ var TypesDictionary = (function () {
             this.types[typeName] = type;
         }
     };
+    TypesDictionary.prototype.getTypesAsArray = function () {
+        var _this = this;
+        return Object.keys(this.types).map(function (prop) { return _this.types[prop]; });
+    };
     TypesDictionary.prototype.getTypes = function () {
         return this.types;
     };
