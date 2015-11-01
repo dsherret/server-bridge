@@ -1,6 +1,3 @@
-/// <reference path="../typings/express/express.d.ts" />
-/// <reference path="../typings/es6-promise/es6-promise.d.ts" />
-
 declare module "decorator-routes" {
     import * as express from "express";
 

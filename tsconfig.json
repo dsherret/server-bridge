@@ -17,6 +17,7 @@
         "src/code-generator/get-method-decorator.ts",
         "src/code-generator/get-class-path.ts",
         "src/code-generator/get-classes.ts",
+        "src/code-generator/type-writer.ts",
         "src/code-generator/types-dictionary.ts",
         "src/typings/tsd.d.ts",
         "src/get.ts",

@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dsherret/decorator-routes#readme",
   "typescript": {
-      "definition": "dist/decorator-routes.d.ts"
+      "definition": "decorator-routes.d.ts"
   },
   "dependencies": {
     "type-info-ts": "https://github.com/dsherret/type-info-ts/tarball/master",

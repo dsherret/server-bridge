@@ -6,6 +6,8 @@ interface Options {
     libraryName?: string;
 }
 
+// todo: error when fileName doesn't exist
+
 export function getGeneratedCode(options: Options, ...fileNames: string[]) {
     const classes = getClasses(...fileNames);
     const {importMapping, libraryName = "decorator-routes" } = options;

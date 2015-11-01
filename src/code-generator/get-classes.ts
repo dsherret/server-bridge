@@ -12,7 +12,7 @@ export function getClasses(...fileNames: string[]) {
     }
 
     allClasses.filter(c => routeClasses.indexOf(c) === -1 && c.name != BASE_CLASS_NAME).forEach((c) => {
-        console.warn(`Ignoring class '${c.name}': Does not implement ${BASE_CLASS_NAME}.`);
+        console.warn(`Ignoring class '${c.name}': Does not extend ${BASE_CLASS_NAME}.`);
     });
 
     return routeClasses;

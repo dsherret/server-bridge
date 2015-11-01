@@ -4,9 +4,13 @@ import {TypesDictionary} from "./types-dictionary";
 import {getRequestPath} from "./get-request-path";
 import {getClassPath} from "./get-class-path";
 import {getMethodDecorator} from "./get-method-decorator";
+import {TypeWriter} from "./type-writer";
 
 export class ClassWriter {
-    constructor(private classDef: TSCode.ClassDefinition, private types: TypesDictionary) {
+    private typeWriter: TypeWriter;
+
+    constructor(private classDef: TSCode.ClassDefinition, types: TypesDictionary) {
+        this.typeWriter = new TypeWriter(types);
     }
 
     writeToWriter(writer: CodeBlockWriter) {
@@ -67,8 +71,8 @@ export class ClassWriter {
     }
 
     private writeMethodParameter(writer: CodeBlockWriter, method: TSCode.MethodDefinition, parameter: TSCode.ParameterDefinition) {
-        writer.write(`${parameter.name}: ${parameter.type.name}`);
-        this.types.add(parameter.type);
+        writer.write(`${parameter.name}: `);
+        this.typeWriter.write(writer, parameter.type);
     }
 
     private writeMethodBody(writer: CodeBlockWriter, method: TSCode.MethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {

@@ -3,6 +3,8 @@ import * as TSCode from "type-info-ts";
 import {ClassWriter} from "./class-writer";
 import {TypesDictionary} from "./types-dictionary";
 
+const CLIENT_BASE_NAME = "ClientBase";
+
 interface Options {
     classes: TSCode.ClassDefinition[];
     importMapping: { [importName: string]: string };
@@ -14,7 +16,6 @@ export function getCodeFromClasses(options: Options) {
     const writer = new CodeBlockWriter();
     const types = new TypesDictionary();
     const {libraryName, classes, importMapping} = options;
-    const clientBaseName = "ClientBase";
 
     classes.forEach((c, classIndex) => {
         if (classIndex > 0) {
@@ -25,10 +26,10 @@ export function getCodeFromClasses(options: Options) {
         classWriter.writeToWriter(writer);
     });
 
-    importWriter.writeLine(`import {${clientBaseName}} from "${libraryName}"`);
+    importWriter.writeLine(`import {${CLIENT_BASE_NAME}} from "${libraryName}"`);
 
     for (const typeName in types.getTypes()) {
-        if (typeName === clientBaseName) {
+        if (typeName === CLIENT_BASE_NAME) {
             throw `Having a type with the name ClientBase is currently not supported. Please use a different type name.`; 
         }
         else if (importMapping[typeName] == null) {

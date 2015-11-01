@@ -1,10 +1,11 @@
 var get_request_path_1 = require("./get-request-path");
 var get_class_path_1 = require("./get-class-path");
 var get_method_decorator_1 = require("./get-method-decorator");
+var type_writer_1 = require("./type-writer");
 var ClassWriter = (function () {
     function ClassWriter(classDef, types) {
         this.classDef = classDef;
-        this.types = types;
+        this.typeWriter = new type_writer_1.TypeWriter(types);
     }
     ClassWriter.prototype.writeToWriter = function (writer) {
         this.writeHeader(writer);
@@ -57,8 +58,8 @@ var ClassWriter = (function () {
         });
     };
     ClassWriter.prototype.writeMethodParameter = function (writer, method, parameter) {
-        writer.write(parameter.name + ": " + parameter.type.name);
-        this.types.add(parameter.type);
+        writer.write(parameter.name + ": ");
+        this.typeWriter.write(writer, parameter.type);
     };
     ClassWriter.prototype.writeMethodBody = function (writer, method, methodDecorator) {
         var _this = this;
