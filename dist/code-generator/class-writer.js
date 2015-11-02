@@ -25,7 +25,7 @@ var ClassWriter = (function () {
     ClassWriter.prototype.writeConstructor = function (writer) {
         var _this = this;
         writer.write("constructor(options?: { urlPrefix: string; })").block(function () {
-            writer.write("super((options == null ? \"\" : (options.urlPrefix || \"\")) + \"" + get_class_path_1.getClassPath(_this.classDef) + "\")");
+            writer.write("super((options == null ? \"\" : (options.urlPrefix || \"\")) + \"" + get_class_path_1.getClassPath(_this.classDef) + "\");");
         });
     };
     ClassWriter.prototype.writeMethods = function (writer) {

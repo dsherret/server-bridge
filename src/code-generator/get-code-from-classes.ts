@@ -26,7 +26,7 @@ export function getCodeFromClasses(options: Options) {
         classWriter.writeToWriter(writer);
     });
 
-    importWriter.writeLine(`import {${CLIENT_BASE_NAME}} from "${libraryName}"`);
+    importWriter.writeLine(`import {${CLIENT_BASE_NAME}} from "${libraryName}";`);
 
     for (const typeName in types.getTypes()) {
         if (typeName === CLIENT_BASE_NAME) {

@@ -32,7 +32,7 @@ export class ClassWriter {
 
     private writeConstructor(writer: CodeBlockWriter) {
         writer.write("constructor(options?: { urlPrefix: string; })").block(() => {
-            writer.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${getClassPath(this.classDef)}")`);
+            writer.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${getClassPath(this.classDef)}");`);
         });
     }
 

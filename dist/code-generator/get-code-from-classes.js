@@ -14,7 +14,7 @@ function getCodeFromClasses(options) {
         var classWriter = new class_writer_1.ClassWriter(c, types);
         classWriter.writeToWriter(writer);
     });
-    importWriter.writeLine("import {" + CLIENT_BASE_NAME + "} from \"" + libraryName + "\"");
+    importWriter.writeLine("import {" + CLIENT_BASE_NAME + "} from \"" + libraryName + "\";");
     for (var typeName in types.getTypes()) {
         if (typeName === CLIENT_BASE_NAME) {
             throw "Having a type with the name ClientBase is currently not supported. Please use a different type name.";
