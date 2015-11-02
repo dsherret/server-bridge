@@ -12,7 +12,7 @@ This library is experimental and needs a bit of work, **so don't use it at this 
 
 ## Example
 
-## Server Side
+### Server Side
 
 Currently only express is supported on the server side.
 
@@ -50,7 +50,7 @@ initializeRoutes(router, [NoteRoutes]);
 // use router here
 ```
 
-## Client Side
+### Client Side
 
 Client side code can be generated automatically from the server side code.
 
