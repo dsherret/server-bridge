@@ -2,6 +2,7 @@ var get_request_path_1 = require("./get-request-path");
 var get_class_path_1 = require("./get-class-path");
 var get_method_decorator_1 = require("./get-method-decorator");
 var type_writer_1 = require("./type-writer");
+var strip_promise_from_string_1 = require("./../utils/strip-promise-from-string");
 var ClassWriter = (function () {
     function ClassWriter(classDef, types) {
         this.classDef = classDef;
@@ -68,14 +69,17 @@ var ClassWriter = (function () {
         });
     };
     ClassWriter.prototype.writeBaseStatement = function (writer, method, methodDecorator) {
-        var returnType = method.returnType == null ? "void" : method.returnType.name;
-        writer.write("this." + method.name.toLowerCase() + "<" + returnType + ">(");
+        writer.write("return super." + methodDecorator.name.toLowerCase() + "<" + this.getReturnType(method) + ">(");
         writer.write("\"" + get_request_path_1.getRequestPath(methodDecorator) + "\"");
         method.parameters.forEach(function (parameter) {
             writer.write(", ");
             writer.write(parameter.name);
         });
         writer.write(");");
+    };
+    ClassWriter.prototype.getReturnType = function (method) {
+        var returnType = method.returnType == null ? "void" : method.returnType.name;
+        return strip_promise_from_string_1.stripPromiseFromString(returnType);
     };
     return ClassWriter;
 })();

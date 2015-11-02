@@ -1,6 +1,6 @@
 {
   "name": "decorator-routes",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "0.0.1",
   "main": "dist/main.js",
   "scripts": {
@@ -23,12 +23,15 @@
   },
   "homepage": "https://github.com/dsherret/decorator-routes#readme",
   "typescript": {
-      "definition": "decorator-routes.d.ts"
+    "definition": "decorator-routes.d.ts"
   },
   "dependencies": {
     "type-info-ts": "https://github.com/dsherret/type-info-ts/tarball/master",
     "code-block-writer": "https://github.com/dsherret/code-block-writer/tarball/master",
     "typescript": "^1.6.2",
     "express": "~4.13.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
   }
 }

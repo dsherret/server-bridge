@@ -5,6 +5,7 @@ import {getRequestPath} from "./get-request-path";
 import {getClassPath} from "./get-class-path";
 import {getMethodDecorator} from "./get-method-decorator";
 import {TypeWriter} from "./type-writer";
+import {stripPromiseFromString} from "./../utils/strip-promise-from-string";
 
 export class ClassWriter {
     private typeWriter: TypeWriter;
@@ -82,9 +83,7 @@ export class ClassWriter {
     }
     
     private writeBaseStatement(writer: CodeBlockWriter, method: TSCode.MethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
-        const returnType = method.returnType == null ? "void" : method.returnType.name;
-
-        writer.write(`this.${method.name.toLowerCase()}<${returnType}>(`);
+        writer.write(`return super.${methodDecorator.name.toLowerCase()}<${this.getReturnType(method)}>(`);
         writer.write(`"${getRequestPath(methodDecorator)}"`);
 
         method.parameters.forEach(parameter => {
@@ -93,5 +92,11 @@ export class ClassWriter {
         });
 
         writer.write(`);`);
+    }
+
+    private getReturnType(method: TSCode.MethodDefinition) {
+        let returnType = method.returnType == null ? "void" : method.returnType.name;
+
+        return stripPromiseFromString(returnType);
     }
 }

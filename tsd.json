@@ -22,6 +22,9 @@
     },
     "express/express.d.ts": {
       "commit": "0b1df1ca5f554ba826ea6cf1c4bc099a6acc8021"
+    },
+    "mocha/mocha.d.ts": {
+      "commit": "eb59a40d3c2f3257e34ec2ede181046230814a41"
     }
   }
 }
