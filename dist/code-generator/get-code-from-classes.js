@@ -24,6 +24,6 @@ function getCodeFromClasses(options) {
         }
         importWriter.writeLine("import {" + typeName + "} from \"" + importMapping[typeName] + "\";");
     }
-    return importWriter.newLine().toString() + writer.newLine().toString();
+    return importWriter.newLine().toString() + writer.toString();
 }
 exports.getCodeFromClasses = getCodeFromClasses;
