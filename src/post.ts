@@ -1,4 +1,5 @@
 import {Routes} from "./routes";
+import {pathJoin} from "./utils/path-join";
 
 export function Post(route: string = null) {
     return (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: Object) => Promise<any>>) => {
@@ -8,7 +9,7 @@ export function Post(route: string = null) {
                 route = methodName;
             }
             
-            instance.router.post(instance.getPath(route), (req, res, next) => {
+            instance.router.post(pathJoin(instance.basePath, route), (req, res, next) => {
                 const sentObject = req.body;
 
                 return descriptor.value(sentObject).then((result) => {

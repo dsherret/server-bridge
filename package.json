@@ -1,7 +1,7 @@
 {
-  "name": "decorator-routes",
-  "version": "0.0.1",
-  "description": "0.0.1",
+  "name": "server-bridge",
+  "version": "0.1.0",
+  "description": "Code generation for a strongly typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
     "test": "mocha --recursive dist/tests",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dsherret/decorator-routes.git"
+    "url": "git+https://github.com/dsherret/server-bridge.git"
   },
   "keywords": [
     "decorators",
@@ -19,11 +19,11 @@
   "author": "David Sherret",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dsherret/decorator-routes/issues"
+    "url": "https://github.com/dsherret/server-bridge/issues"
   },
-  "homepage": "https://github.com/dsherret/decorator-routes#readme",
+  "homepage": "https://github.com/dsherret/server-bridge#readme",
   "typescript": {
-    "definition": "decorator-routes.d.ts"
+    "definition": "server-bridge.d.ts"
   },
   "dependencies": {
     "type-info-ts": "https://github.com/dsherret/type-info-ts/tarball/master",

@@ -10,7 +10,7 @@ import {stripPromiseFromString} from "./../utils/strip-promise-from-string";
 export class ClassWriter {
     private typeWriter: TypeWriter;
 
-    constructor(private classDef: TSCode.ClassDefinition, types: TypesDictionary) {
+    constructor(private classDef: TSCode.ClassDefinition, types: TypesDictionary, private className: string) {
         this.typeWriter = new TypeWriter(types);
     }
 
@@ -20,7 +20,7 @@ export class ClassWriter {
     }
 
     private writeHeader(writer: CodeBlockWriter) {
-        writer.write(`export class ${this.classDef.name} extends ClientBase`);
+        writer.write(`export class ${this.className} extends ClientBase`);
     }
 
     private writeBody(writer: CodeBlockWriter) {

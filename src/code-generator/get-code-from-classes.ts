@@ -8,6 +8,7 @@ const CLIENT_BASE_NAME = "ClientBase";
 interface Options {
     classes: TSCode.ClassDefinition[];
     importMapping: { [importName: string]: string };
+    classMapping?: { [className: string]: string };
     libraryName: string;
 }
 
@@ -22,7 +23,7 @@ export function getCodeFromClasses(options: Options) {
             writer.newLine();
         }
 
-        const classWriter = new ClassWriter(c, types);
+        const classWriter = new ClassWriter(c, types, options.classMapping[c.name] || c.name);
         classWriter.writeToWriter(writer);
     });
 

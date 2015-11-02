@@ -9,26 +9,4 @@ export class Routes {
             item(this);
         });
     }
-
-    // todo: move this out of this class and into its own file
-    getPath(route: string) {
-        if (route[0] != "/") {
-            route = "/" + route;
-        }
-
-        route = this.basePath + route;
-
-        if (route[0] != "/") {
-            route = "/" + route;
-        }
-
-        return route;
-    }
-
-    static initializeRoutes(router: express.Router, ...routes: typeof Routes[]) {
-        routes.forEach((route) => {
-            const routerConstructor = route as any;
-            new routerConstructor(router);
-        });
-    }
 }

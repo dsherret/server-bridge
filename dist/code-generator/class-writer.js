@@ -4,8 +4,9 @@ var get_method_decorator_1 = require("./get-method-decorator");
 var type_writer_1 = require("./type-writer");
 var strip_promise_from_string_1 = require("./../utils/strip-promise-from-string");
 var ClassWriter = (function () {
-    function ClassWriter(classDef, types) {
+    function ClassWriter(classDef, types, className) {
         this.classDef = classDef;
+        this.className = className;
         this.typeWriter = new type_writer_1.TypeWriter(types);
     }
     ClassWriter.prototype.writeToWriter = function (writer) {
@@ -13,7 +14,7 @@ var ClassWriter = (function () {
         this.writeBody(writer);
     };
     ClassWriter.prototype.writeHeader = function (writer) {
-        writer.write("export class " + this.classDef.name + " extends ClientBase");
+        writer.write("export class " + this.className + " extends ClientBase");
     };
     ClassWriter.prototype.writeBody = function (writer) {
         var _this = this;

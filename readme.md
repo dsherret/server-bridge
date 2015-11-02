@@ -1,26 +1,26 @@
-decorator-routes
-================
+server-bridge
+=============
 
-A wrapper around existing routing libraries to enable better syntax by using decorators.
+Code generation for a strongly typed bridge between the client and server.
 
-This library is experimental and currently doesn't work exactly as explained here (needs a bit more work). **So don't use it yet!** :)
+This library is experimental and needs a bit of work, **so don't use it at this time!**
 
-## What will this library do?
+## What does this library do?
 
-1. Help you write code on the server that listens to requests.
-2. Generate client-side code from this server side code to send requests to the server.
+1. Help you write code on the server that listens for requests.
+2. Generates client-side code from the server side code to send requests to the server.
 
 ## Example
 
 ## Server Side
 
-Here's an example of what this might look like.
+Currently only express is supported on the server side.
 
 Declare a route class that inherits from `Routes`:
 
 ```typescript
 // note-routes.ts
-import {Use, Get, Post, Routes} from "decorator-routes";
+import {Use, Get, Post, Routes} from "server-bridge";
 import {StorageFactory} from "./../factories/storage-factory";
 import {Note} from "shared-libs";
 
@@ -41,13 +41,12 @@ export class NoteRoutes extends Routes {
 Then initialize all the routes:
 
 ```typescript
-// rough idea code
 import * as express from "express";
-import {initializeRoutes} from "decorator-routes";
+import {initializeRoutes} from "server-bridge";
 import {NoteRoutes} from "./note-routes";
 
 const router = express.Router();
-initializeRoutes(router, NoteRoutes);
+initializeRoutes(router, [NoteRoutes]);
 // use router here
 ```
 
@@ -56,31 +55,31 @@ initializeRoutes(router, NoteRoutes);
 Client side code can be generated automatically from the server side code.
 
 ```typescript
-import {getGeneratedCode} from "decorator-routes";
+import {getGeneratedCode} from "server-bridge";
     
 const clientSideCode = getGeneratedCode({
-    importMapping: { Note: "shared-lib" },
-    classMapping: { NoteRoutes: "NoteApi" }
+    classMapping: { "NoteRoutes": "NoteApi" },
+    importMapping: { "Note": "./note" }
 }, "note-routes.ts");
 ```
-    
+
 After doing this, `clientSideCode` would contain the following code for use in a client-side file:
 
 ```typescript
-import {ClientBase} from "decorator-routes";
-import {Note} from "shared-libs";
+import {ClientBase} from "server-bridge-superagent-client";
+import {Note} from "./note";
 
 export class NoteApi extends ClientBase {
-    constructor() {
-        super("/notes");
+    constructor(options?: {urlPrefix: string; }) {
+        super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
     }
 
     get(noteID: string) {
-        return this.get<Note>(`/${noteID}`);
+        return super.get<Note>(`/${noteID}`);
     }
 
     set(note: Note) {
-        return this.post<Note>("/", note);
+        return super.post<Note>("/", note);
     }
 }
 ```
@@ -95,3 +94,5 @@ notes.get(5).then((note) => {
     // use note here
 });
 ```
+
+Note: Only superagent is supported client side right now.

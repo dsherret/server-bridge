@@ -11,7 +11,7 @@ function getCodeFromClasses(options) {
         if (classIndex > 0) {
             writer.newLine();
         }
-        var classWriter = new class_writer_1.ClassWriter(c, types);
+        var classWriter = new class_writer_1.ClassWriter(c, types, options.classMapping[c.name] || c.name);
         classWriter.writeToWriter(writer);
     });
     importWriter.writeLine("import {" + CLIENT_BASE_NAME + "} from \"" + libraryName + "\";");
