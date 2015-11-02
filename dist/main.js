@@ -8,5 +8,3 @@ var use_1 = require("./use");
 exports.Use = use_1.Use;
 var routes_1 = require("./routes");
 exports.Routes = routes_1.Routes;
-var client_base_1 = require("./client-base");
-exports.ClientBase = client_base_1.ClientBase;

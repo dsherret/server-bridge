@@ -3,7 +3,6 @@
 /// <reference path="mime/mime.d.ts" />
 /// <reference path="node/node.d.ts" />
 /// <reference path="serve-static/serve-static.d.ts" />
-/// <reference path="superagent/superagent.d.ts" />
 /// <reference path="typescript/typescript.d.ts" />
 /// <reference path="../../node_modules/code-block-writer/dist/code-block-writer.d.ts" />
 /// <reference path="../../node_modules/type-info-ts/type-info-ts.d.ts" />

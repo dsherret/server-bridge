@@ -13,10 +13,4 @@ declare module "decorator-routes" {
         getPath(route: string): string;
         static initializeRoutes(router: express.Router, ...routes: typeof Routes[]): void;
     }
-    export class ClientBase {
-        private baseUrl;
-        constructor(baseUrl: string);
-        protected get<ReturnType>(url: string, args?: Object): Promise<ReturnType>;
-        protected post<SendType, ReturnType>(url: string, sendObj: SendType, args?: Object): Promise<ReturnType>;
-    }
 }

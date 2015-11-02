@@ -22,9 +22,6 @@
     },
     "express/express.d.ts": {
       "commit": "0b1df1ca5f554ba826ea6cf1c4bc099a6acc8021"
-    },
-    "superagent/superagent.d.ts": {
-      "commit": "121837732fcd98bfb3f7bb4c30a490558e0d23ca"
     }
   }
 }
