@@ -7,7 +7,7 @@ This library is experimental and still needs a bit of work.
 
 ## What does this library do?
 
-1. Help you write code on the server that listens for requests.
+1. Helps you write code on the server that listens for requests.
 2. Generates client-side code from the server side code to send requests to the server.
 
 ## Example
