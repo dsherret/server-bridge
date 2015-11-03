@@ -4,12 +4,16 @@ declare module "server-bridge" {
     export function Post(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: Object) => Promise<any>>) => void;
     export function Use(basePath?: string): (target: typeof Routes) => void;
     export class Routes {
-        routeInitializations: RouteDefinition[];
+        routeDefinitions: RouteDefinition[];
         basePath: string;
     }
     interface RouteDefinition {
         method: Method;
         name: string;
         func: Function;
+    }
+    const enum Method {
+        Get = 0,
+        Post = 1
     }
 }
