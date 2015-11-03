@@ -16,73 +16,73 @@ This library is experimental and still needs a bit of work.
 
 1. Install `server-bridge`:
 
-```
-npm install server-bridge --save
-```
+    ```
+    npm install server-bridge --save
+    ```
 
 2. Declare a route class that inherits from `Routes`. Add a `@Use` decorator with the path if necessary and then define `@Get` and `@Post` decorators on the methods similar to as shown:
 
-```typescript
-// note-routes.ts
-import {Use, Get, Post, Routes} from "server-bridge";
-import {StorageFactory} from "./../factories/storage-factory";
-import {Note} from "./note";
-
-@Use("/notes")
-export class NoteRoutes extends Routes {
-    @Get("/:noteID")
-    get(noteID: string) {
-        return StorageFactory.createNoteStorage().get(noteID);
+    ```typescript
+    // note-routes.ts
+    import {Use, Get, Post, Routes} from "server-bridge";
+    import {StorageFactory} from "./../factories/storage-factory";
+    import {Note} from "./note";
+    
+    @Use("/notes")
+    export class NoteRoutes extends Routes {
+        @Get("/:noteID")
+        get(noteID: string) {
+            return StorageFactory.createNoteStorage().get(noteID);
+        }
+    
+        @Post("/")
+        set(note: Note) {
+            return StorageFactory.createNoteStorage().set(note);
+        }
     }
-
-    @Post("/")
-    set(note: Note) {
-        return StorageFactory.createNoteStorage().set(note);
-    }
-}
-```
+    ```
 
 3. Install `server-bridge-express` to initialize routes for express:
 
-```
-npm install server-bridge-express --save
-```
+    ```
+    npm install server-bridge-express --save
+    ```
 
 4. Initialize the routes with `server-bridge-express`
 
-```typescript
-import * as express from "express";
-import {initializeRoutes} from "server-bridge-express";
-import {NoteRoutes} from "./note-routes";
-
-const router = express.Router();
-initializeRoutes(router, [NoteRoutes]);
-// use router when configuring express
-```
+    ```typescript
+    import * as express from "express";
+    import {initializeRoutes} from "server-bridge-express";
+    import {NoteRoutes} from "./note-routes";
+    
+    const router = express.Router();
+    initializeRoutes(router, [NoteRoutes]);
+    // use router when configuring express
+    ```
 
 ### Client Side
 
 1. Generate client side code from the server side code:
 
-```typescript
-import {getGeneratedCode} from "server-bridge";
-import * as fs from "fs";
-
-// get the generated code
-const clientSideCode = getGeneratedCode({
-    classMapping: { "NoteRoutes": "NoteApi" },
-    importMapping: { "Note": "./note" },
-    libraryName: "server-bridge-superagent-client"
-}, "note-routes.ts");
-// write it to a file
-fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
-```
+    ```typescript
+    import {getGeneratedCode} from "server-bridge";
+    import * as fs from "fs";
+    
+    // get the generated code
+    const clientSideCode = getGeneratedCode({
+        classMapping: { "NoteRoutes": "NoteApi" },
+        importMapping: { "Note": "./note" },
+        libraryName: "server-bridge-superagent-client"
+    }, "note-routes.ts");
+    // write it to a file
+    fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
+    ```
 
 2. Install `server-bridge-superagent-client` in the client application by running:
 
-```
-npm install server-bridge-superagent-client --save
-```
+    ```
+    npm install server-bridge-superagent-client --save
+    ```
 
 After generating the code, `server.ts` would contain the following code for use in a client-side application:
 
