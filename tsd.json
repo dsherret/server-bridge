@@ -14,15 +14,6 @@
     "es6-promise/es6-promise.d.ts": {
       "commit": "a59efa21a25762f86bef315be08f2d8b0385e210"
     },
-    "serve-static/serve-static.d.ts": {
-      "commit": "0b1df1ca5f554ba826ea6cf1c4bc099a6acc8021"
-    },
-    "mime/mime.d.ts": {
-      "commit": "0b1df1ca5f554ba826ea6cf1c4bc099a6acc8021"
-    },
-    "express/express.d.ts": {
-      "commit": "0b1df1ca5f554ba826ea6cf1c4bc099a6acc8021"
-    },
     "mocha/mocha.d.ts": {
       "commit": "eb59a40d3c2f3257e34ec2ede181046230814a41"
     }

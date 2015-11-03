@@ -20,15 +20,12 @@
         "src/code-generator/get-classes.ts",
         "src/code-generator/type-writer.ts",
         "src/code-generator/types-dictionary.ts",
-        "src/initialize-routes.ts",
         "src/tests/utils/strip-promise-from-string-tests.ts",
-        "src/tests/utils/path-join-tests.ts",
         "src/typings/tsd.d.ts",
         "src/utils/strip-promise-from-string.ts",
-        "src/utils/path-join.ts",
-        "src/get.ts",
-        "src/post.ts",
-        "src/use.ts",
+        "src/decorators.ts",
+        "src/method.ts",
+        "src/route-definition.ts",
         "src/routes.ts",
         "src/main.ts"
     ]

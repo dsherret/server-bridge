@@ -1,12 +1,7 @@
-import * as express from "express";
+import {RouteDefinition} from "./route-definition"; 
 
 export class Routes {
-    routeInitializations: Array<(instance: Routes) => void>;
+    // do not put a default values on these properties because it will overwrite the prototype value
+    routeDefinitions: RouteDefinition[]; 
     basePath: string;
-
-    constructor(public router: express.Router) {
-        this.routeInitializations.forEach((item) => {
-            item(this);
-        });
-    }
 }

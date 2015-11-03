@@ -3,7 +3,7 @@ server-bridge
 
 Code generation for a strongly typed bridge between the client and server.
 
-This library is experimental and needs a bit of work, **so don't use it at this time!**
+This library is experimental and still needs a bit of work.
 
 ## What does this library do?
 
@@ -14,15 +14,19 @@ This library is experimental and needs a bit of work, **so don't use it at this 
 
 ### Server Side
 
-Currently only express is supported on the server side.
+1. Install `server-bridge`:
 
-Declare a route class that inherits from `Routes`:
+```
+npm install server-bridge --save
+```
+
+2. Declare a route class that inherits from `Routes`. Add a `@Use` decorator with the path if necessary and then define `@Get` and `@Post` decorators on the methods similar to as shown:
 
 ```typescript
 // note-routes.ts
 import {Use, Get, Post, Routes} from "server-bridge";
 import {StorageFactory} from "./../factories/storage-factory";
-import {Note} from "shared-libs";
+import {Note} from "./note";
 
 @Use("/notes")
 export class NoteRoutes extends Routes {
@@ -33,37 +37,54 @@ export class NoteRoutes extends Routes {
 
     @Post("/")
     set(note: Note) {
-        return StorageFactory.createNoteStorage().post(note);
+        return StorageFactory.createNoteStorage().set(note);
     }
 }
 ```
 
-Then initialize all the routes:
+3. Install `server-bridge-express` to initialize routes for express:
+
+```
+npm install server-bridge-express --save
+```
+
+4. Initialize the routes with `server-bridge-express`
 
 ```typescript
 import * as express from "express";
-import {initializeRoutes} from "server-bridge";
+import {initializeRoutes} from "server-bridge-express";
 import {NoteRoutes} from "./note-routes";
 
 const router = express.Router();
 initializeRoutes(router, [NoteRoutes]);
-// use router here
+// use router when configuring express
 ```
 
 ### Client Side
 
-Client side code can be generated automatically from the server side code.
+1. Generate client side code from the server side code:
 
 ```typescript
 import {getGeneratedCode} from "server-bridge";
-    
+import * as fs from "fs";
+
+// get the generated code
 const clientSideCode = getGeneratedCode({
     classMapping: { "NoteRoutes": "NoteApi" },
-    importMapping: { "Note": "./note" }
+    importMapping: { "Note": "./note" },
+    libraryName: "server-bridge-superagent-client"
 }, "note-routes.ts");
+// write it to a file
+fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
 ```
 
-After doing this, `clientSideCode` would contain the following code for use in a client-side file:
+2. Install `server-bridge-superagent-client` in the client application by running:
+
+```
+npm install server-bridge-superagent-client --save
+```
+
+After generating the code, `server.ts` would contain the following code for use in a client-side application:
 
 ```typescript
 import {ClientBase} from "server-bridge-superagent-client";
