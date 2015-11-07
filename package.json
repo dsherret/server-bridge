@@ -1,6 +1,6 @@
 {
   "name": "server-bridge",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Code generation for a strongly typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
@@ -26,8 +26,8 @@
     "definition": "server-bridge.d.ts"
   },
   "dependencies": {
-    "type-info-ts": "https://github.com/dsherret/type-info-ts/tarball/master",
-    "code-block-writer": "https://github.com/dsherret/code-block-writer/tarball/master",
+    "ts-type-info": "0.0.1",
+    "code-block-writer": "1.0.0",
     "typescript": "^1.6.2"
   },
   "devDependencies": {

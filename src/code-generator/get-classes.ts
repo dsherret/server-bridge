@@ -1,4 +1,4 @@
-import * as TSCode from "type-info-ts";
+import * as TSCode from "ts-type-info";
 
 const BASE_CLASS_NAME = "Routes";
 

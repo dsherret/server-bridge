@@ -1,5 +1,5 @@
 import CodeBlockWriter from "code-block-writer";
-import * as TSCode from "type-info-ts";
+import * as TSCode from "ts-type-info";
 import {ClassWriter} from "./class-writer";
 import {TypesDictionary} from "./types-dictionary";
 

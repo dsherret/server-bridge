@@ -1,4 +1,4 @@
-import * as TSCode from "type-info-ts";
+import * as TSCode from "ts-type-info";
 
 export function getMethodDecorator(method: TSCode.MethodDefinition) {
     let methodDecorator: TSCode.DecoratorDefinition;

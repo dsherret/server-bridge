@@ -1,4 +1,4 @@
-import * as TSCode from "type-info-ts";
+import * as TSCode from "ts-type-info";
 
 export function getRequestPath(methodDecorator: TSCode.DecoratorDefinition) {
     let requestPath = "";

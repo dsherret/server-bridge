@@ -1,4 +1,4 @@
-var TSCode = require("type-info-ts");
+var TSCode = require("ts-type-info");
 var BASE_CLASS_NAME = "Routes";
 function getClasses() {
     var fileNames = [];
