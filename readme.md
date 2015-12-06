@@ -1,7 +1,7 @@
 server-bridge
 =============
 
-Code generation for a strongly typed bridge between the client and server.
+Code generation for a statically typed bridge between the client and server.
 
 This library is experimental and still needs a bit of work.
 
@@ -30,7 +30,7 @@ This library is experimental and still needs a bit of work.
 
     @Use("/notes")
     export class NoteRoutes extends Routes {
-        @Get("/:noteID")
+        @Get("/:noteID") // not yet implemented. See #3
         get(noteID: string) {
             return StorageFactory.createNoteStorage().get(noteID);
         }

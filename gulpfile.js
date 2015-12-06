@@ -37,4 +37,4 @@ gulp.task("clean-scripts", function(cb) {
     return del(["./dist/**/*{.js,.js.map}"], cb);
 });
 
-gulp.task("default", ["tslint", "typescript", "watch"]);
+gulp.task("default", ["tslint", "typescript"]);

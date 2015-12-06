@@ -11,7 +11,7 @@ interface Options {
 // todo: error when fileName doesn't exist
 
 export function getGeneratedCode(options: Options, fileNames: string[]) {
-    const classes = getClasses(...fileNames);
+    const classes = getClasses(fileNames);
     const {classMapping, importMapping, libraryName = "server-bridge-superagent-client" } = options;
 
     return getDocumentation({ libraryName: libraryName }) +

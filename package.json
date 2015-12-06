@@ -1,7 +1,7 @@
 {
   "name": "server-bridge",
   "version": "0.2.3",
-  "description": "Code generation for a strongly typed bridge between the client and server in TypeScript.",
+  "description": "Code generation for a statically typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
     "test": "gulp test",
@@ -14,7 +14,8 @@
   "keywords": [
     "decorators",
     "typescript",
-    "routes"
+    "routes",
+    "code generation"
   ],
   "author": "David Sherret",
   "license": "MIT",
@@ -26,18 +27,18 @@
     "definition": "server-bridge.d.ts"
   },
   "dependencies": {
-    "ts-type-info": "0.2.0",
+    "ts-type-info": "0.2.3",
     "code-block-writer": "1.0.0",
-    "typescript": "^1.6.2"
+    "typescript": "^1.7.3"
   },
   "devDependencies": {
-    "del": "^2.0.2",
+    "del": "^2.1.0",
     "gulp": "^3.9.0",
     "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^3.3.1",
-    "gulp-typescript": "^2.9.2",
-    "mocha": "^2.3.3",
-    "tslint": "^2.5.1"
+    "gulp-tslint": "^4.1.1",
+    "gulp-typescript": "^2.10.0",
+    "mocha": "^2.3.4",
+    "tslint": "^3.1.1"
   }
 }
