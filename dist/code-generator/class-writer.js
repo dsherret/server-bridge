@@ -85,3 +85,5 @@ var ClassWriter = (function () {
     return ClassWriter;
 })();
 exports.ClassWriter = ClassWriter;
+
+//# sourceMappingURL=class-writer.js.map

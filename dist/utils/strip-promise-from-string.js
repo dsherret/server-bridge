@@ -10,3 +10,5 @@ function stripPromiseFromString(str) {
     return str;
 }
 exports.stripPromiseFromString = stripPromiseFromString;
+
+//# sourceMappingURL=strip-promise-from-string.js.map

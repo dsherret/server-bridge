@@ -10,3 +10,5 @@ function getMethodDecorator(method) {
     return methodDecorator;
 }
 exports.getMethodDecorator = getMethodDecorator;
+
+//# sourceMappingURL=get-method-decorator.js.map

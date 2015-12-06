@@ -11,3 +11,5 @@ describe("stripPromiseFromString", function () {
         assert.equal(strip_promise_from_string_1.stripPromiseFromString("Promise<string>[]"), "Promise<string>[]");
     });
 });
+
+//# sourceMappingURL=strip-promise-from-string-tests.js.map

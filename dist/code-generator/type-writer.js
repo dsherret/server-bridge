@@ -24,3 +24,5 @@ var TypeWriter = (function () {
     return TypeWriter;
 })();
 exports.TypeWriter = TypeWriter;
+
+//# sourceMappingURL=type-writer.js.map

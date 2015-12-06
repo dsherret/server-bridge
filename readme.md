@@ -27,14 +27,14 @@ This library is experimental and still needs a bit of work.
     import {Use, Get, Post, Routes} from "server-bridge";
     import {StorageFactory} from "./../factories/storage-factory";
     import {Note} from "./note";
-    
+
     @Use("/notes")
     export class NoteRoutes extends Routes {
         @Get("/:noteID")
         get(noteID: string) {
             return StorageFactory.createNoteStorage().get(noteID);
         }
-    
+
         @Post("/")
         set(note: Note) {
             return StorageFactory.createNoteStorage().set(note);
@@ -54,7 +54,7 @@ This library is experimental and still needs a bit of work.
     import * as express from "express";
     import {initializeRoutes} from "server-bridge-express";
     import {NoteRoutes} from "./note-routes";
-    
+
     const router = express.Router();
     initializeRoutes(router, [NoteRoutes]);
     // use router when configuring express
@@ -67,13 +67,13 @@ This library is experimental and still needs a bit of work.
     ```typescript
     import {getGeneratedCode} from "server-bridge";
     import * as fs from "fs";
-    
+
     // get the generated code
     const clientSideCode = getGeneratedCode({
         classMapping: { "NoteRoutes": "NoteApi" },
         importMapping: { "Note": "./note" },
         libraryName: "server-bridge-superagent-client"
-    }, "note-routes.ts");
+    }, [ "note-routes.ts" ]);
     // write it to a file
     fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
     ```

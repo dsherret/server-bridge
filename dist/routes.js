@@ -4,3 +4,5 @@ var Routes = (function () {
     return Routes;
 })();
 exports.Routes = Routes;
+
+//# sourceMappingURL=routes.js.map

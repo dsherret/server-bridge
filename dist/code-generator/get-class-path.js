@@ -10,3 +10,5 @@ function getClassPath(classDef) {
     return usePath;
 }
 exports.getClassPath = getClassPath;
+
+//# sourceMappingURL=get-class-path.js.map

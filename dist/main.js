@@ -6,3 +6,5 @@ exports.Get = decorators_1.Get;
 exports.Post = decorators_1.Post;
 var routes_1 = require("./routes");
 exports.Routes = routes_1.Routes;
+
+//# sourceMappingURL=main.js.map

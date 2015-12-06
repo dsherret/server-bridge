@@ -1,11 +1,11 @@
 {
   "name": "server-bridge",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Code generation for a strongly typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "scripts": {
-    "test": "mocha --recursive dist/tests",
-    "build": "tsc"
+    "test": "gulp test",
+    "build": "gulp typescript"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,18 @@
     "definition": "server-bridge.d.ts"
   },
   "dependencies": {
-    "ts-type-info": "0.0.1",
+    "ts-type-info": "0.2.0",
     "code-block-writer": "1.0.0",
     "typescript": "^1.6.2"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^3.3.1",
+    "gulp-typescript": "^2.9.2",
+    "mocha": "^2.3.3",
+    "tslint": "^2.5.1"
   }
 }

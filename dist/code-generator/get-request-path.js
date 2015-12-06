@@ -20,3 +20,5 @@ function makeSlashIfEmpty(requestPath) {
     }
     return requestPath;
 }
+
+//# sourceMappingURL=get-request-path.js.map

@@ -28,3 +28,5 @@ function baseMethodRoute(route, method) {
         });
     };
 }
+
+//# sourceMappingURL=decorators.js.map

@@ -27,3 +27,5 @@ function getCodeFromClasses(options) {
     return importWriter.newLine().toString() + writer.toString();
 }
 exports.getCodeFromClasses = getCodeFromClasses;
+
+//# sourceMappingURL=get-code-from-classes.js.map
