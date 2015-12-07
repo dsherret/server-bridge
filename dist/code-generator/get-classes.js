@@ -7,9 +7,6 @@ function getClasses(fileNames) {
     if (routeClasses.length === 0) {
         console.warn("Could not find any classes that extends " + BASE_CLASS_NAME + ".");
     }
-    allClasses.filter(function (c) { return routeClasses.indexOf(c) === -1 && c.name != BASE_CLASS_NAME; }).forEach(function (c) {
-        console.warn("Ignoring class '" + c.name + "': Does not extend " + BASE_CLASS_NAME + ".");
-    });
     return routeClasses;
 }
 exports.getClasses = getClasses;

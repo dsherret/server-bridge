@@ -11,9 +11,11 @@ export function getClasses(fileNames: string[]) {
         console.warn(`Could not find any classes that extends ${BASE_CLASS_NAME}.`);
     }
 
+    /*
     allClasses.filter(c => routeClasses.indexOf(c) === -1 && c.name != BASE_CLASS_NAME).forEach((c) => {
         console.warn(`Ignoring class '${c.name}': Does not extend ${BASE_CLASS_NAME}.`);
     });
+    */
 
     return routeClasses;
 }
