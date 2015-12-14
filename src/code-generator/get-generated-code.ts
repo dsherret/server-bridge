@@ -18,4 +18,4 @@ export function getGeneratedCode(options: Options, fileNames: string[]) {
         getCodeFromClasses({ classes: classes, importMapping: importMapping || {}, classMapping: classMapping || {}, libraryName: libraryName });
 }
 
-// console.log(getGeneratedCode({ classMapping: { NoteRoutes: "NoteApi" }, importMapping: { Note: "shared-lib" } }, "src/__tests__/resources/test-file.ts"));
+// console.log(getGeneratedCode({ classMapping: { NoteRoutes: "NoteApi" }, importMapping: { Note: "shared-lib" } }, ["src/__tests__/resources/test-file.ts"]));

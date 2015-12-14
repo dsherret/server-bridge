@@ -1,6 +1,6 @@
 import * as TSCode from "ts-type-info";
 
-export function getMethodDecorator(method: TSCode.MethodDefinition) {
+export function getMethodDecorator(method: TSCode.ClassMethodDefinition) {
     let methodDecorator: TSCode.DecoratorDefinition;
 
     for (const decorator of method.decorators) {

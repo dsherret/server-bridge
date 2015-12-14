@@ -43,7 +43,7 @@ export class ClassWriter {
         });
     }
 
-    private writeMethod(writer: CodeBlockWriter, method: TSCode.MethodDefinition) {
+    private writeMethod(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition) {
         let methodDecorator = getMethodDecorator(method);
 
         if (methodDecorator == null) {
@@ -55,13 +55,13 @@ export class ClassWriter {
         this.writeMethodBody(writer, method, methodDecorator);
     }
 
-    private writeMethodHeader(writer: CodeBlockWriter, method: TSCode.MethodDefinition) {
+    private writeMethodHeader(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition) {
         writer.write(`${method.name}(`);
         this.writeMethodParameters(writer, method);
         writer.write(")");
     }
 
-    private writeMethodParameters(writer: CodeBlockWriter, method: TSCode.MethodDefinition) {
+    private writeMethodParameters(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition) {
         method.parameters.forEach((parameter, parameterIndex) => {
             if (parameterIndex > 0) {
                 writer.write(", ");
@@ -71,18 +71,18 @@ export class ClassWriter {
         });
     }
 
-    private writeMethodParameter(writer: CodeBlockWriter, method: TSCode.MethodDefinition, parameter: TSCode.ParameterDefinition) {
+    private writeMethodParameter(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, parameter: TSCode.ParameterDefinition) {
         writer.write(`${parameter.name}: `);
         this.typeWriter.write(writer, parameter.type);
     }
 
-    private writeMethodBody(writer: CodeBlockWriter, method: TSCode.MethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
+    private writeMethodBody(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
         writer.block(() => {
             this.writeBaseStatement(writer, method, methodDecorator);
         });
     }
-    
-    private writeBaseStatement(writer: CodeBlockWriter, method: TSCode.MethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
+
+    private writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
         writer.write(`return super.${methodDecorator.name.toLowerCase()}<${this.getReturnType(method)}>(`);
         writer.write(`"${getRequestPath(methodDecorator)}"`);
 
@@ -94,7 +94,7 @@ export class ClassWriter {
         writer.write(`);`);
     }
 
-    private getReturnType(method: TSCode.MethodDefinition) {
+    private getReturnType(method: TSCode.ClassMethodDefinition) {
         let returnType = method.returnType == null ? "void" : method.returnType.name;
 
         return stripPromiseFromString(returnType);
