@@ -13,4 +13,4 @@ describe("stripPromiseFromString", () => {
     it("should get not get rid of the promise if the last index is not the close brace", () => {
         assert.equal(stripPromiseFromString("Promise<string>[]"), "Promise<string>[]");
     });
-})
+});

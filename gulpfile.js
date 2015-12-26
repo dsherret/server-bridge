@@ -11,7 +11,7 @@ gulp.task("typescript", ["clean-scripts"], function() {
         typescript: require("typescript")
     });
 
-    return gulp.src(["./src/typings/**/*.d.ts", "./src/**/*.ts"])
+    return gulp.src(["./src/typings/**/*.d.ts", "./src/**/*.ts", "!src/tests/**/resources/*.ts"])
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(sourcemaps.write("./"))
@@ -19,7 +19,7 @@ gulp.task("typescript", ["clean-scripts"], function() {
 });
 
 gulp.task("test", ["typescript"], function() {
-    return gulp.src("dist/tests/**/*.js")
+    return gulp.src(["dist/tests/**/*.js", "!dist/tests/**/resources/*.js"])
         .pipe(mocha({ reporter: "progress" }));
 });
 

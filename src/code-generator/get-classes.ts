@@ -5,7 +5,7 @@ const BASE_CLASS_NAME = "Routes";
 export function getClasses(fileNames: string[]) {
     const files = TSCode.getFileInfo(fileNames);
     const allClasses = files.map((file) => file.classes).reduce((a, b) => a.concat(b));
-    const routeClasses = allClasses.filter(c => c.baseClasses.some(base => base.name === BASE_CLASS_NAME));
+    const routeClasses = allClasses.filter(c => c.extends.some(base => base.name === BASE_CLASS_NAME));
 
     if (routeClasses.length === 0) {
         console.warn(`Could not find any classes that extends ${BASE_CLASS_NAME}.`);

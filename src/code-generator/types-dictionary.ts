@@ -28,6 +28,6 @@ export class TypesDictionary {
     // todo: Move out of this class. This filtering should be done by the ImportWriter
     private isLibType(typeName: string) {
         // todo: do an automatic check through lib.d.ts to ignore those types
-        return ["string", "number", "Date"].some(t => t == typeName);
+        return ["string", "number", "Date"].some(t => t === typeName);
     }
 }

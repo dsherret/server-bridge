@@ -4,3 +4,8 @@
 *.js.map
 /src/__tests__
 /dist/__tests__
+/server-bridge.v12.suo
+/server-bridge.csproj
+/server-bridge.csproj.user
+/server-bridge.sln
+/obj

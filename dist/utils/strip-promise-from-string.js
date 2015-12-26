@@ -1,5 +1,5 @@
 function stripPromiseFromString(str) {
-    var PROMISE_START = 'Promise<';
+    var PROMISE_START = "Promise<";
     var promiseStartIndex = str.indexOf(PROMISE_START);
     if (promiseStartIndex === 0) {
         if (str[str.length - 1] === ">") {

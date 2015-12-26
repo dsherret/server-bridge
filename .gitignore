@@ -1,3 +1,8 @@
 /.vscode
 /node_modules
 *.js.map
+/server-bridge.v12.suo
+/server-bridge.csproj
+/server-bridge.csproj.user
+/server-bridge.sln
+/obj

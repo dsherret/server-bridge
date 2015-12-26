@@ -1,9 +1,6 @@
 import CodeBlockWriter from "code-block-writer";
 import * as TSCode from "ts-type-info";
 import {TypesDictionary} from "./types-dictionary";
-import {getRequestPath} from "./get-request-path";
-import {getClassPath} from "./get-class-path";
-import {getMethodDecorator} from "./get-method-decorator";
 
 export class TypeWriter {
     constructor(private types: TypesDictionary) {

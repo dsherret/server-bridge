@@ -27,7 +27,7 @@
     "definition": "server-bridge.d.ts"
   },
   "dependencies": {
-    "ts-type-info": "0.4.2",
+    "ts-type-info": "0.5.0",
     "code-block-writer": "1.0.0",
     "typescript": "^1.7.3"
   },

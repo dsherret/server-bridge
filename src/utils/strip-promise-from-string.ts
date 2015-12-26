@@ -1,5 +1,5 @@
 export function stripPromiseFromString(str: string) {
-    const PROMISE_START = 'Promise<';
+    const PROMISE_START = "Promise<";
     const promiseStartIndex = str.indexOf(PROMISE_START);
 
     if (promiseStartIndex === 0) {

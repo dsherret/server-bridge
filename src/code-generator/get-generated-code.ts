@@ -6,16 +6,17 @@ interface Options {
     classMapping?: { [className: string]: string };
     importMapping?: { [importName: string]: string };
     libraryName?: string;
+    includeDocumentation?: boolean;
 }
 
 // todo: error when fileName doesn't exist
 
 export function getGeneratedCode(options: Options, fileNames: string[]) {
     const classes = getClasses(fileNames);
-    const {classMapping, importMapping, libraryName = "server-bridge-superagent-client" } = options;
+    const {classMapping, importMapping, libraryName = "server-bridge-superagent-client", includeDocumentation = true } = options;
 
-    return getDocumentation({ libraryName: libraryName }) +
-        getCodeFromClasses({ classes: classes, importMapping: importMapping || {}, classMapping: classMapping || {}, libraryName: libraryName });
+    return (includeDocumentation ? getDocumentation({ libraryName: libraryName }) : "") +
+        getCodeFromClasses({ classes: classes, importMapping: importMapping || {}, classMapping: classMapping || {}, libraryName: libraryName});
 }
 
 // console.log(getGeneratedCode({ classMapping: { NoteRoutes: "NoteApi" }, importMapping: { Note: "shared-lib" } }, ["src/__tests__/resources/test-file.ts"]));

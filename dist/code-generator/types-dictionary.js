@@ -20,7 +20,7 @@ var TypesDictionary = (function () {
         return this.types;
     };
     TypesDictionary.prototype.isLibType = function (typeName) {
-        return ["string", "number", "Date"].some(function (t) { return t == typeName; });
+        return ["string", "number", "Date"].some(function (t) { return t === typeName; });
     };
     return TypesDictionary;
 })();

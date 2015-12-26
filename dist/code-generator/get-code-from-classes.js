@@ -15,15 +15,15 @@ function getCodeFromClasses(options) {
         classWriter.writeToWriter(writer);
     });
     importWriter.writeLine("import {" + CLIENT_BASE_NAME + "} from \"" + libraryName + "\";");
-    for (var typeName in types.getTypes()) {
+    Object.keys(types.getTypes()).forEach(function (typeName) {
         if (typeName === CLIENT_BASE_NAME) {
-            throw "Having a type with the name ClientBase is currently not supported. Please use a different type name.";
+            throw new Error("Having a type with the name ClientBase is currently not supported. Please use a different type name.");
         }
         else if (importMapping[typeName] == null) {
-            throw "An import mapping needs to be specified on the options parameter for '" + typeName + "' when calling getGeneratedCode()";
+            throw new Error("An import mapping needs to be specified on the options parameter for '" + typeName + "' when calling getGeneratedCode()");
         }
         importWriter.writeLine("import {" + typeName + "} from \"" + importMapping[typeName] + "\";");
-    }
+    });
     return importWriter.newLine().toString() + writer.toString();
 }
 exports.getCodeFromClasses = getCodeFromClasses;
