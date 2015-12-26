@@ -20,7 +20,7 @@ export class TypeWriter {
     private writeTypeWithProperties(writer: CodeBlockWriter, type: TSCode.Type) {
         writer.write("{ ");
 
-        for (var property of type.properties) {
+        for (const property of type.properties) {
             writer.write(`${property.name}: `);
             this.write(writer, property.type);
             writer.write("; ");
