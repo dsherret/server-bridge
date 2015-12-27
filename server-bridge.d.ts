@@ -1,5 +1,12 @@
 declare module "server-bridge" {
-    export function getGeneratedCode(options: { importMapping?: { [importName: string]: string; }; }, fileNames: string[]): string;
+    interface Options {
+        classMapping?: { [className: string]: string };
+        importMapping?: { [importName: string]: string };
+        libraryName?: string;
+        includeDocumentation?: boolean;
+    }
+
+    export function getGeneratedCode(options: Options, fileNames: string[]): string;
     export function Get(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(obj: any) => Promise<any>>) => void;
     export function Post(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: any) => Promise<any>>) => void;
     export function Use(basePath?: string): (target: typeof Routes) => void;
