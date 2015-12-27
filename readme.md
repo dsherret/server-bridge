@@ -30,7 +30,7 @@ This library is experimental and still needs a bit of work.
 
     @Use("/notes")
     export class NoteRoutes extends Routes {
-        @Get("/:noteID") // not yet implemented. See #3
+        @Get("/:noteID")
         get(noteID: string) {
             return StorageFactory.createNoteStorage().get(noteID);
         }
@@ -96,7 +96,7 @@ export class NoteApi extends ClientBase {
     }
 
     get(noteID: string) {
-        return super.get<Note>(`/${noteID}`);
+        return super.get<Note>("/" + noteID);
     }
 
     set(note: Note) {

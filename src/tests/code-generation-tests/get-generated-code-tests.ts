@@ -12,8 +12,8 @@ export class NoteRoutes extends ClientBase {
        super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
    }
 
-   getMethod(noteID: { noteID: string; test: number; }) {
-       return super.get<number>("/", noteID);
+   getMethod(noteID: number) {
+       return super.get<number>("/" + noteID);
    }
 
    postMethod(note: Note) {

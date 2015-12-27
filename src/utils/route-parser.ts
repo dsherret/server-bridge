@@ -3,10 +3,10 @@
 export class RouteParser {
     private urlParts: string[];
     private queryParameters: { [name: string]: string } = {};
-    private isHttpString = false;
+    private isHttpString: boolean;
 
     constructor(routeString: string) {
-        this.parse(routeString);
+        this.parse(routeString || "");
     }
 
     getParameterNames() {
@@ -20,11 +20,13 @@ export class RouteParser {
         return ArrayUtils.getUniqueInStringArray(parameterNames);
     }
 
-    getUrl(params: { [key: string]: string; } = {}) {
-        return this.getUrlPartsString(params) + this.getQueryParametersString(params);
+    getUrlCodeString() {
+        let urlString = `"${this.getUrlPartsString() + this.getQueryParametersString()}"`;
+
+        return urlString.replace(/\s\+\s\"\"$/, "");
     }
 
-    private getUrlPartsString(params: { [key: string]: string; }) {
+    private getUrlPartsString() {
         let str = "";
 
         if (this.isHttpString) {
@@ -34,10 +36,10 @@ export class RouteParser {
             str += "/";
         }
 
-        return str + this.urlParts.map(p => this.fillStringWithParams(p, params)).join("/");
+        return str + this.urlParts.map(p => this.handleString(p)).join("/");
     }
 
-    private getQueryParametersString(params: { [key: string]: string; }) {
+    private getQueryParametersString() {
         const queryNames = Object.keys(this.queryParameters);
         let str = "";
 
@@ -47,8 +49,8 @@ export class RouteParser {
             const paramStrings: string[] = [];
 
             for (const name of queryNames) {
-                const key = this.fillStringWithParams(name, params);
-                const value = this.fillStringWithParams(this.queryParameters[name], params);
+                const key = this.handleString(name);
+                const value = this.handleString(this.queryParameters[name]);
 
                 paramStrings.push(`${key}=${value}`);
             }
@@ -59,19 +61,13 @@ export class RouteParser {
         return str;
     }
 
-    private fillStringWithParams(str: string, params: { [key: string]: string; }) {
+    private handleString(str: string) {
         if (str[0] === ":") {
-            const paramName = str.substr(1);
-
-            if (typeof params[paramName] !== "undefined") {
-                str = params[paramName];
-            }
-            else {
-                throw new Error(`The following parameter was not specified: ${paramName}`);
-            }
+            return `" + ${str.substr(1)} + "`;
         }
-
-        return str;
+        else {
+            return str;
+        }
     }
 
     private parse(routeString: string) {

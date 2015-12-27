@@ -1,5 +1,5 @@
 ﻿import * as assert from "assert";
-import {RouteParser} from "./../../utils/route-parser";
+import {RouteParser} from "./../../utils";
 
 describe("RouteParser", () => {
     describe("constructor()", () => {
@@ -46,69 +46,65 @@ describe("RouteParser", () => {
         });
     });
 
-    describe("getUrl()", () => {
+    describe("getUrlCodeString()", () => {
+        it("should return a slash when the string is null", () => {
+            const parser = new RouteParser(null);
+            assert.equal(parser.getUrlCodeString(), `"/"`);
+        });
+
+        it("should return a slash when the string is empty", () => {
+            const parser = new RouteParser("");
+            assert.equal(parser.getUrlCodeString(), `"/"`);
+        });
+
         it("should work with just url parts", () => {
             const parser = new RouteParser("/notes/1");
-            assert.equal(parser.getUrl(), "/notes/1");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1"`);
         });
 
         it("should ignore trailing slash", () => {
             const parser = new RouteParser("/notes/1/");
-            assert.equal(parser.getUrl(), "/notes/1");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1"`);
         });
 
         it("should add a slash at the beginning when not starting with http://", () => {
             const parser = new RouteParser("notes/1");
-            assert.equal(parser.getUrl(), "/notes/1");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1"`);
         });
 
         it("should not add slash at the beginning when starting with http://", () => {
             const parser = new RouteParser("http://test.com/notes/1");
-            assert.equal(parser.getUrl(), "http://test.com/notes/1");
+            assert.equal(parser.getUrlCodeString(), `"http://test.com/notes/1"`);
         });
 
         it("should work with one query parameter", () => {
             const parser = new RouteParser("/notes/1?myparam=test");
-            assert.equal(parser.getUrl(), "/notes/1?myparam=test");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=test"`);
         });
 
         it("should work with multiple query parameters", () => {
             const parser = new RouteParser("/notes/1?myparam=test&myotherparam=t");
-            assert.equal(parser.getUrl(), "/notes/1?myparam=test&myotherparam=t");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=test&myotherparam=t"`);
         });
 
         it("should strip a duplicate query parameter", () => {
             const parser = new RouteParser("/notes/1?myparam=test&myparam=something");
-            assert.equal(parser.getUrl(), "/notes/1?myparam=test");
-        });
-    });
-
-    describe("getUrl(params)", () => {
-        it("should replace the url string values", () => {
-            const parser = new RouteParser("/notes/:noteID");
-            assert.equal(parser.getUrl({ noteID: "5" }), "/notes/5");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=test"`);
         });
 
         it("should replace the url string values", () => {
             const parser = new RouteParser("/notes/:noteID");
-            assert.equal(parser.getUrl({ noteID: "5" }), "/notes/5");
+            assert.equal(parser.getUrlCodeString(), `"/notes/" + noteID`);
         });
 
         it("should replace the query parameter values", () => {
             const parser = new RouteParser("/notes/1?myparam=:value&otherone=:other");
-            assert.equal(parser.getUrl({ value: "test", other: "something" }), "/notes/1?myparam=test&otherone=something");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=" + value + "&otherone=" + other`);
         });
 
         it("should replace the query parameter keys", () => {
             const parser = new RouteParser("/notes/1?:key=value&:other=other");
-            assert.equal(parser.getUrl({ key: "test", other: "something" }), "/notes/1?test=value&something=other");
-        });
-
-        it("should throw an error when not specifying a key", () => {
-            const parser = new RouteParser("/notes/1?:key=value");
-            assert.throws(() => {
-                parser.getUrl();
-            }, Error, "The following parameter was not specified: key");
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?" + key + "=value&" + other + "=other"`);
         });
     });
 });

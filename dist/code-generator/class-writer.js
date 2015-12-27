@@ -1,8 +1,7 @@
-var get_request_path_1 = require("./get-request-path");
 var get_class_path_1 = require("./get-class-path");
 var get_method_decorator_1 = require("./get-method-decorator");
 var type_writer_1 = require("./type-writer");
-var strip_promise_from_string_1 = require("./../utils/strip-promise-from-string");
+var utils_1 = require("./../utils");
 var ClassWriter = (function () {
     function ClassWriter(classDef, types, className) {
         this.classDef = classDef;
@@ -70,17 +69,29 @@ var ClassWriter = (function () {
         });
     };
     ClassWriter.prototype.writeBaseStatement = function (writer, method, methodDecorator) {
+        var parser = new utils_1.RouteParser(methodDecorator.arguments.length > 0 ? methodDecorator.arguments[0].text : null);
+        var urlParameterNames = parser.getParameterNames();
+        this.verifyMethodHasParameterNames(method, urlParameterNames);
         writer.write("return super." + methodDecorator.name.toLowerCase() + "<" + this.getReturnType(method) + ">(");
-        writer.write("\"" + get_request_path_1.getRequestPath(methodDecorator) + "\"");
+        writer.write("" + parser.getUrlCodeString());
         method.parameters.forEach(function (parameter) {
-            writer.write(", ");
-            writer.write(parameter.name);
+            if (!urlParameterNames.some(function (name) { return name === parameter.name; })) {
+                writer.write(", ");
+                writer.write(parameter.name);
+            }
         });
         writer.write(");");
     };
     ClassWriter.prototype.getReturnType = function (method) {
         var returnType = method.returnType == null ? "void" : method.returnType.name;
-        return strip_promise_from_string_1.stripPromiseFromString(returnType);
+        return utils_1.stripPromiseFromString(returnType);
+    };
+    ClassWriter.prototype.verifyMethodHasParameterNames = function (method, paramNames) {
+        paramNames.forEach(function (paramName) {
+            if (!method.parameters.some(function (p) { return p.name === paramName; })) {
+                throw new Error("The parameter " + paramName + " does not exist on the method " + method.name);
+            }
+        });
     };
     return ClassWriter;
 })();

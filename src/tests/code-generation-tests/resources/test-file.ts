@@ -5,12 +5,14 @@ import {Note} from "./test-note";
 @Use("/notes")
 export class NoteRoutes extends Routes {
     @Get("/:noteID")
-    getMethod(noteID: { noteID: string, test: number }) {
+    getMethod(noteID: number) {
+        // dummy code
         return new Promise<number>(() => 12);
     }
 
     @Post("/")
     postMethod(note: Note) {
+        // dummy code
         return new Promise<number>(() => 5);
     }
 }

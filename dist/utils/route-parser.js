@@ -2,8 +2,7 @@ var array_utils_1 = require("./array-utils");
 var RouteParser = (function () {
     function RouteParser(routeString) {
         this.queryParameters = {};
-        this.isHttpString = false;
-        this.parse(routeString);
+        this.parse(routeString || "");
     }
     RouteParser.prototype.getParameterNames = function () {
         var _this = this;
@@ -15,11 +14,11 @@ var RouteParser = (function () {
             .map(function (p) { return p.substr(1); });
         return array_utils_1.ArrayUtils.getUniqueInStringArray(parameterNames);
     };
-    RouteParser.prototype.getUrl = function (params) {
-        if (params === void 0) { params = {}; }
-        return this.getUrlPartsString(params) + this.getQueryParametersString(params);
+    RouteParser.prototype.getUrlCodeString = function () {
+        var urlString = "\"" + (this.getUrlPartsString() + this.getQueryParametersString()) + "\"";
+        return urlString.replace(/\s\+\s\"\"$/, "");
     };
-    RouteParser.prototype.getUrlPartsString = function (params) {
+    RouteParser.prototype.getUrlPartsString = function () {
         var _this = this;
         var str = "";
         if (this.isHttpString) {
@@ -28,9 +27,9 @@ var RouteParser = (function () {
         else {
             str += "/";
         }
-        return str + this.urlParts.map(function (p) { return _this.fillStringWithParams(p, params); }).join("/");
+        return str + this.urlParts.map(function (p) { return _this.handleString(p); }).join("/");
     };
-    RouteParser.prototype.getQueryParametersString = function (params) {
+    RouteParser.prototype.getQueryParametersString = function () {
         var queryNames = Object.keys(this.queryParameters);
         var str = "";
         if (queryNames.length > 0) {
@@ -38,25 +37,21 @@ var RouteParser = (function () {
             var paramStrings = [];
             for (var _i = 0; _i < queryNames.length; _i++) {
                 var name_1 = queryNames[_i];
-                var key = this.fillStringWithParams(name_1, params);
-                var value = this.fillStringWithParams(this.queryParameters[name_1], params);
+                var key = this.handleString(name_1);
+                var value = this.handleString(this.queryParameters[name_1]);
                 paramStrings.push(key + "=" + value);
             }
             str += paramStrings.join("&");
         }
         return str;
     };
-    RouteParser.prototype.fillStringWithParams = function (str, params) {
+    RouteParser.prototype.handleString = function (str) {
         if (str[0] === ":") {
-            var paramName = str.substr(1);
-            if (typeof params[paramName] !== "undefined") {
-                str = params[paramName];
-            }
-            else {
-                throw new Error("The following parameter was not specified: " + paramName);
-            }
+            return "\" + " + str.substr(1) + " + \"";
         }
-        return str;
+        else {
+            return str;
+        }
     };
     RouteParser.prototype.parse = function (routeString) {
         var questionMarkIndex = routeString.indexOf("?");

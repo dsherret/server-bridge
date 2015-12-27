@@ -1,11 +1,10 @@
 import CodeBlockWriter from "code-block-writer";
 import * as TSCode from "ts-type-info";
 import {TypesDictionary} from "./types-dictionary";
-import {getRequestPath} from "./get-request-path";
 import {getClassPath} from "./get-class-path";
 import {getMethodDecorator} from "./get-method-decorator";
 import {TypeWriter} from "./type-writer";
-import {stripPromiseFromString} from "./../utils/strip-promise-from-string";
+import {stripPromiseFromString, RouteParser} from "./../utils";
 
 export class ClassWriter {
     private typeWriter: TypeWriter;
@@ -83,12 +82,19 @@ export class ClassWriter {
     }
 
     private writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
+        const parser = new RouteParser(methodDecorator.arguments.length > 0 ? methodDecorator.arguments[0].text : null);
+        const urlParameterNames = parser.getParameterNames();
+
+        this.verifyMethodHasParameterNames(method, urlParameterNames);
+
         writer.write(`return super.${methodDecorator.name.toLowerCase()}<${this.getReturnType(method)}>(`);
-        writer.write(`"${getRequestPath(methodDecorator)}"`);
+        writer.write(`${parser.getUrlCodeString()}`);
 
         method.parameters.forEach(parameter => {
-            writer.write(", ");
-            writer.write(parameter.name);
+            if (!urlParameterNames.some(name => name === parameter.name)) {
+                writer.write(", ");
+                writer.write(parameter.name);
+            }
         });
 
         writer.write(`);`);
@@ -98,5 +104,13 @@ export class ClassWriter {
         let returnType = method.returnType == null ? "void" : method.returnType.name;
 
         return stripPromiseFromString(returnType);
+    }
+
+    private verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {
+        paramNames.forEach(paramName => {
+            if (!method.parameters.some(p => p.name === paramName)) {
+                throw new Error(`The parameter ${paramName} does not exist on the method ${method.name}`);
+            }
+        });
     }
 }
