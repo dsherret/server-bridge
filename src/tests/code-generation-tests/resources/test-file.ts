@@ -1,4 +1,4 @@
-/// <reference path="../../../typings/es6-promise/es6-promise.d.ts" />
+/// <reference path="../../../typings/main/ambient/es6-promise/index.d.ts" />
 import {Use, Get, Post, Routes} from "server-bridge";
 import {Note} from "./test-note";
 

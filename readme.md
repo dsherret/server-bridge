@@ -3,12 +3,10 @@ server-bridge
 
 Code generation for a statically typed bridge between the client and server.
 
-This library is experimental and still needs a bit of work.
-
 ## What does this library do?
 
 1. Helps you write code on the server that listens for requests.
-2. Generates client-side code from the server side code to send requests to the server.
+2. Generates client-side code from the server-side code to send requests to the server.
 
 ## Example
 
@@ -18,6 +16,7 @@ This library is experimental and still needs a bit of work.
 
     ```
     npm install server-bridge --save
+    typings install npm:server-bridge --save
     ```
 
 2. Declare a route class that inherits from `Routes`. Add a `@Use` decorator with the path if necessary and then define `@Get` and `@Post` decorators on the methods similar to as shown:
@@ -46,6 +45,7 @@ This library is experimental and still needs a bit of work.
 
     ```
     npm install server-bridge-express --save
+    typings install npm:server-bridge-express --save
     ```
 
 4. Initialize the routes with `server-bridge-express`
@@ -70,10 +70,11 @@ This library is experimental and still needs a bit of work.
 
     // get the generated code
     const clientSideCode = getGeneratedCode({
+        files: ["note-routes.ts"]
         classMapping: { "NoteRoutes": "NoteApi" },
         importMapping: { "Note": "./note" },
         libraryName: "server-bridge-superagent-client"
-    }, [ "note-routes.ts" ]);
+    });
     // write it to a file
     fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
     ```
@@ -82,6 +83,7 @@ This library is experimental and still needs a bit of work.
 
     ```
     npm install server-bridge-superagent-client --save
+    typings install npm:server-bridge-superagent-client --save
     ```
 
 After generating the code, `server.ts` would contain the following code for use in a client-side application:

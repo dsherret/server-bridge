@@ -1,0 +1,16 @@
+{
+  "name": "server-bridge",
+  "main": "server-bridge.d.ts",
+  "ambientDependencies": {
+    "es6-promise": "github:DefinitelyTyped/DefinitelyTyped/es6-promise/es6-promise.d.ts#a59efa21a25762f86bef315be08f2d8b0385e210"
+  },
+  "ambientDevDependencies": {
+    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#eb59a40d3c2f3257e34ec2ede181046230814a41",
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#121837732fcd98bfb3f7bb4c30a490558e0d23ca",
+    "typescript": "github:DefinitelyTyped/DefinitelyTyped/typescript/typescript.d.ts#3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+  },
+  "devDependencies": {
+    "code-block-writer": "npm:code-block-writer",
+    "ts-type-info": "npm:ts-type-info"
+  }
+}
