@@ -3,7 +3,7 @@ import * as TSCode from "ts-type-info";
 import {stripPromiseFromString, stripQuotes, RouteParser} from "./../utils";
 import {TypesDictionary} from "./TypesDictionary";
 import {getClassPath} from "./getClassPath";
-import {getMethodDecorator} from "./getMethodDecorator"
+import {getMethodDecorator} from "./getMethodDecorator";
 
 const CLIENT_BASE_NAME = "ClientBase";
 
@@ -37,8 +37,8 @@ export function getCodeFromClasses(options: Options) {
             }]
         });
         const classPath = stripQuotes(getClassPath(c));
-        c.constructorDef.onWriteFunctionBody = writer => {
-            writer.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${classPath}");`);
+        c.constructorDef.onWriteFunctionBody = functionWriter => {
+            functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${classPath}");`);
         };
         c.properties.length = 0;
         c.staticMethods.length = 0;
@@ -56,8 +56,8 @@ export function getCodeFromClasses(options: Options) {
                 method.parameters.forEach(p => {
                     types.add(p.typeExpression);
                 });
-                method.onWriteFunctionBody = writer => {
-                    writeBaseStatement(writer, method, methodDecorator);
+                method.onWriteFunctionBody = methodWriter => {
+                    writeBaseStatement(methodWriter, method, methodDecorator);
                 };
                 return true;
             }
