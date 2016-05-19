@@ -15,59 +15,54 @@ interface Options {
 }
 
 export function getCodeFromClasses(options: Options) {
-    const importWriter = new CodeBlockWriter();
-    const writer = new CodeBlockWriter();
+    const fileForWrite = TSCode.createFile();
     const types = new TypesDictionary();
     const {libraryName, classes, importMapping} = options;
 
-    classes.forEach((c, classIndex) => {
-        if (classIndex > 0) {
-            writer.newLine();
-        }
-
-        c.name = options.classMapping[c.name] || c.name;
-        c.methods = c.methods.filter(m => m.scope === TSCode.Scope.Public);
-        c.extendsTypeExpressions.length = 0;
-        c.addExtends("ClientBase");
-        c.setConstructor({
-            parameters: [{
-                name: "options",
-                isOptional: true,
-                type: "{ urlPrefix: string; }"
-            }]
+    classes.forEach((c) => {
+        fileForWrite.addClasses({
+            name: options.classMapping[c.name] || c.name,
+            isExported: true,
+            extendsTypes: ["ClientBase"],
+            constructorDef: {
+                parameters: [{
+                    name: "options",
+                    isOptional: true,
+                    type: "{ urlPrefix: string; }"
+                }],
+                onWriteFunctionBody: functionWriter => {
+                    functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${stripQuotes(getClassPath(c))}");`);
+                }
+            },
+            methods: c.methods
+                .filter(m => m.scope === TSCode.Scope.Public)
+                .map(m => ({ decorator: getMethodDecorator(m), method: m }))
+                .filter(methodAndDecorator => {
+                    if (methodAndDecorator.decorator == null) {
+                        console.warn(`Ignoring method ${methodAndDecorator.method.name} because it did not have a Post or Get decorator.`);
+                    }
+                    return methodAndDecorator.decorator != null;
+                })
+                .map(methodAndDecorator => ({
+                    name: methodAndDecorator.method.name,
+                    parameters: methodAndDecorator.method.parameters.map(param => {
+                        types.add(param.typeExpression);
+                        return {
+                            name: param.name,
+                            type: param.typeExpression.text
+                        };
+                    }),
+                    onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
+                        writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
+                    }
+                }))
         });
-        const classPath = stripQuotes(getClassPath(c));
-        c.constructorDef.onWriteFunctionBody = functionWriter => {
-            functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${classPath}");`);
-        };
-        c.properties.length = 0;
-        c.staticMethods.length = 0;
-        c.staticProperties.length = 0;
-        c.decorators.length = 0;
-        c.methods = c.methods.filter(method => {
-            let methodDecorator = getMethodDecorator(method);
-
-            if (methodDecorator == null) {
-                console.warn(`Ignoring method ${method.name} because it did not have a Post or Get decorator.`);
-                return false;
-            }
-            else {
-                method.decorators.length = 0;
-                method.parameters.forEach(p => {
-                    types.add(p.typeExpression);
-                });
-                method.onWriteFunctionBody = methodWriter => {
-                    writeBaseStatement(methodWriter, method, methodDecorator);
-                };
-                return true;
-            }
-        });
-
-        // todo: pass in writer
-        writer.write(c.write());
     });
 
-    importWriter.writeLine(`import {${CLIENT_BASE_NAME}} from "${libraryName}";`);
+    fileForWrite.addImports({
+        namedImports: [{ name: CLIENT_BASE_NAME }],
+        moduleSpecifier: libraryName
+    });
 
     Object.keys(types.getTypes()).forEach(typeName => {
         if (typeName === CLIENT_BASE_NAME) {
@@ -77,10 +72,13 @@ export function getCodeFromClasses(options: Options) {
             throw new Error(`An import mapping needs to be specified on the options parameter for '${typeName}' when calling getGeneratedCode()`);
         }
 
-        importWriter.writeLine(`import {${typeName}} from "${importMapping[typeName]}";`);
+        fileForWrite.addImports({
+            namedImports: [{ name: typeName }],
+            moduleSpecifier: importMapping[typeName]
+        });
     });
 
-    return importWriter.newLine().newLine().write(writer.toString());
+    return fileForWrite.write();
 }
 
 function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {

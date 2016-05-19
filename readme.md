@@ -8,6 +8,12 @@ Code generation for a statically typed bridge between the client and server.
 1. Helps you write code on the server that listens for requests.
 2. Generates client-side code from the server-side code to send requests to the server.
 
+## Advantages
+
+1. You don't have to write the client-side code to send requests.
+2. After code generation, your client-side code will throw a compile error if a breaking change happened so you don't forget to update your code.
+3. Auto-completion will show you what is expected to be sent to the server.
+
 ## Example
 
 ### Server Side
@@ -16,7 +22,6 @@ Code generation for a statically typed bridge between the client and server.
 
     ```
     npm install server-bridge --save
-    typings install npm:server-bridge --save
     ```
 
 2. Declare a route class that inherits from `Routes`. Add a `@Use` decorator with the path if necessary and then define `@Get` and `@Post` decorators on the methods similar to as shown:
@@ -45,7 +50,6 @@ Code generation for a statically typed bridge between the client and server.
 
     ```
     npm install server-bridge-express --save
-    typings install npm:server-bridge-express --save
     ```
 
 4. Initialize the routes with `server-bridge-express`
@@ -83,7 +87,6 @@ Code generation for a statically typed bridge between the client and server.
 
     ```
     npm install server-bridge-superagent-client --save
-    typings install npm:server-bridge-superagent-client --save
     ```
 
 After generating the code, `server.ts` would contain the following code for use in a client-side application:

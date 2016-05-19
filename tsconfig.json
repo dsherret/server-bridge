@@ -9,11 +9,5 @@
         "outDir": "dist",
         "rootDir": "src",
         "sourceMap": false
-    },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "src/typings/browser.d.ts",
-        "src/typings/browser"
-    ]
+    }
 }

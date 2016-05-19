@@ -1,5 +1,5 @@
 import {Routes} from "./routes";
-import {Method} from "./method";
+import {Method} from "./Method";
 
 export function Use(basePath: string = "") {
     return (target: typeof Routes) => {

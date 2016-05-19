@@ -1,4 +1,4 @@
-import {Method} from "./method";
+import {Method} from "./Method";
 
 export interface RouteDefinition {
     method: Method;
