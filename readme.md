@@ -14,6 +14,11 @@ Code generation for a statically typed bridge between the client and server.
 2. After code generation, your client-side code will throw a compile error if a breaking change happened so you don't forget to update your code.
 3. Auto-completion will show you what is expected to be sent to the server.
 
+## Current Support
+
+Only express (server) and super-agent (client) are supported right now, but more support can be trivially added.
+If there's something you would like open up an issue and I'll take a look at it.
+
 ## Example
 
 ### Server Side
