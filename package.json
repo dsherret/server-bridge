@@ -1,6 +1,6 @@
 {
   "name": "server-bridge",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Code generation for a statically typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "typings": "server-bridge.d.ts",
@@ -28,8 +28,8 @@
     "definition": "server-bridge.d.ts"
   },
   "dependencies": {
-    "code-block-writer": "^3.1.1",
-    "ts-type-info": "^3.1.1",
+    "code-block-writer": "^4.0.0",
+    "ts-type-info": "^4.0.0",
     "typescript": "^1.8.9"
   },
   "devDependencies": {

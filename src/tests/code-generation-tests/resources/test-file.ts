@@ -1,5 +1,5 @@
 /// <reference path="../../../typings/globals/es6-promise/index.d.ts" />
-import {Use, Get, Post, Routes} from "server-bridge";
+import {Use, Get, Post, Routes} from "./../../../main";
 import {Note} from "./test-note";
 
 @Use("/notes")

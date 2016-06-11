@@ -20,7 +20,7 @@ export function getCodeFromClasses(options: Options) {
     const {libraryName, classes, importMapping} = options;
 
     classes.forEach((c) => {
-        fileForWrite.addClasses({
+        fileForWrite.addClass({
             name: options.classMapping[c.name] || c.name,
             isExported: true,
             extendsTypes: ["ClientBase"],
@@ -46,10 +46,10 @@ export function getCodeFromClasses(options: Options) {
                 .map(methodAndDecorator => ({
                     name: methodAndDecorator.method.name,
                     parameters: methodAndDecorator.method.parameters.map(param => {
-                        types.add(param.typeExpression);
+                        types.add(param.type);
                         return {
                             name: param.name,
-                            type: param.typeExpression.text
+                            type: param.type.text
                         };
                     }),
                     onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
@@ -59,7 +59,7 @@ export function getCodeFromClasses(options: Options) {
         });
     });
 
-    fileForWrite.addImports({
+    fileForWrite.addImport({
         namedImports: [{ name: CLIENT_BASE_NAME }],
         moduleSpecifier: libraryName
     });
@@ -72,7 +72,7 @@ export function getCodeFromClasses(options: Options) {
             throw new Error(`An import mapping needs to be specified on the options parameter for '${typeName}' when calling getGeneratedCode()`);
         }
 
-        fileForWrite.addImports({
+        fileForWrite.addImport({
             namedImports: [{ name: typeName }],
             moduleSpecifier: importMapping[typeName]
         });
@@ -101,7 +101,7 @@ function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodD
 }
 
 function getReturnType(method: TSCode.ClassMethodDefinition) {
-    let returnType = method.returnTypeExpression == null ? "void" : method.returnTypeExpression.text;
+    let returnType = method.returnType == null ? "void" : method.returnType.text;
 
     return stripPromiseFromString(returnType);
 }

@@ -1,9 +1,9 @@
 import * as TSCode from "ts-type-info";
 
 export class TypesDictionary {
-    private types: { [typeName: string]: TSCode.TypeExpressionDefinition } = {};
+    private types: { [typeName: string]: TSCode.TypeDefinition } = {};
 
-    add(type: TSCode.TypeExpressionDefinition) {
+    add(type: TSCode.TypeDefinition) {
         let typeName = type.text;
 
         if (!this.isLibType(typeName) && !this.isObjectType(typeName)) {
