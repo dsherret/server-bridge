@@ -22,7 +22,6 @@ export class RouteParser {
 
     getUrlCodeString() {
         let urlString = `"${this.getUrlPartsString() + this.getQueryParametersString()}"`;
-
         return urlString.replace(/\s\+\s\"\"$/, "");
     }
 

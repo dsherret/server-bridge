@@ -11,8 +11,9 @@ Code generation for a statically typed bridge between the client and server.
 ## Advantages
 
 1. You don't have to write the client-side code to send requests.
-2. After code generation, your client-side code will throw a compile error if a breaking change happened so you don't forget to update your code.
+2. After code generation, your client-side code will throw a compile error if a breaking change happened so you won't ever forget to update your client-side code.
 3. Auto-completion will show you what is expected to be sent to the server.
+4. The interfaces that describe what data is being sent/received from the server are automatically included in your client application.
 
 ## Current Support
 
@@ -32,21 +33,24 @@ If there's something you would like open up an issue and I'll take a look at it.
 2. Declare a route class that inherits from `Routes`. Add a `@Use` decorator with the path if necessary and then define `@Get` and `@Post` decorators on the methods similar to as shown:
 
     ```typescript
-    // note-routes.ts
+    // NoteRoutes.ts
     import {Use, Get, Post, Routes} from "server-bridge";
-    import {StorageFactory} from "./../factories/storage-factory";
-    import {Note} from "./note";
+    import {Note} from "./Note";
 
     @Use("/notes")
     export class NoteRoutes extends Routes {
-        @Get("/:noteID")
-        get(noteID: string) {
-            return StorageFactory.createNoteStorage().get(noteID);
+        static memoryNoteStorage: Note[] = [];
+
+        // uses the method name for the path if none specified: /notes/getAll
+        @Get()
+        getAll() {
+            // if you need to do any async work here then return a Promise instead
+            return NoteRoutes.memoryNoteStorage;
         }
 
         @Post("/")
         set(note: Note) {
-            return StorageFactory.createNoteStorage().set(note);
+            NoteRoutes.memoryNoteStorage.push(note);
         }
     }
     ```
@@ -57,16 +61,26 @@ If there's something you would like open up an issue and I'll take a look at it.
     npm install server-bridge-express --save
     ```
 
-4. Initialize the routes with `server-bridge-express`
+4. Initialize the routes with `initializeRoutes` from `server-bridge-express`
 
     ```typescript
+    // index.ts
     import * as express from "express";
+    import * as bodyParser from "body-parser";
     import {initializeRoutes} from "server-bridge-express";
-    import {NoteRoutes} from "./note-routes";
+    import {NoteRoutes} from "./NoteRoutes";
 
+    const SERVER_PORT = 8082;
+    const app = express();
     const router = express.Router();
+
     initializeRoutes(router, [NoteRoutes]);
-    // use router when configuring express
+    app.use(bodyParser.json());
+    app.use("/", router);
+
+    const server = app.listen(SERVER_PORT, () => {
+        console.log(`Running on port ${server.address().port}`);
+    });
     ```
 
 ### Client Side
@@ -74,18 +88,17 @@ If there's something you would like open up an issue and I'll take a look at it.
 1. Generate client side code from the server side code:
 
     ```typescript
-    import {getGeneratedCode} from "server-bridge";
     import * as fs from "fs";
+    import {getGeneratedCode} from "server-bridge";
 
     // get the generated code
     const clientSideCode = getGeneratedCode({
-        files: ["note-routes.ts"]
+        files: ["src/NoteRoutes.ts"],
         classMapping: { "NoteRoutes": "NoteApi" },
-        importMapping: { "Note": "./note" },
         libraryName: "server-bridge-superagent-client"
     });
-    // write it to a file
-    fs.writeFile("../my-client-application/src/server.ts", clientSideCode);
+    // write it to a file in the client application
+    fs.writeFile("../client/src/server.ts", clientSideCode);
     ```
 
 2. Install `server-bridge-superagent-client` in the client application by running:
@@ -98,15 +111,19 @@ After generating the code, `server.ts` would contain the following code for use 
 
 ```typescript
 import {ClientBase} from "server-bridge-superagent-client";
-import {Note} from "./note";
+
+export interface Note {
+    text: string;
+    creationDate: Date;
+}
 
 export class NoteApi extends ClientBase {
     constructor(options?: {urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
     }
 
-    get(noteID: string) {
-        return super.get<Note>("/" + noteID);
+    getAll() {
+        return super.get<Note[]>("/getAll");
     }
 
     set(note: Note) {
@@ -120,10 +137,23 @@ Which could then be used in the client like so:
 ```typescript
 import {NoteApi} from "./server";
 
-const notes = new NoteApi();
-notes.get(5).then((note) => {
-    // use note here
+const notes = new NoteApi({ urlPrefix: "http://localhost:8082" });
+notes.getAll().then((notes) => {
+    // use notes here
 });
 ```
 
-Note: Only superagent is supported client side right now.
+#### Dependency: Promises
+
+ES6 promises are used in the client application. If you are using an environment that doesn't support ES6 promises, then install the `es6-promise` package:
+
+```
+npm install es6-promise --save
+typings install dt~es6-promise --save --global
+```
+
+And run the polyfill by running the following code when your application starts:
+
+```
+import "es6-promise";
+```

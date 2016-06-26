@@ -3,13 +3,13 @@ import * as TSCode from "ts-type-info";
 import {stripPromiseFromString, stripQuotes, RouteParser} from "./../utils";
 import {TypesDictionary} from "./TypesDictionary";
 import {getClassPath} from "./getClassPath";
+import {InterfaceFromTypeGenerator} from "./InterfaceFromTypeGenerator";
 import {getMethodDecorator} from "./getMethodDecorator";
 
 const CLIENT_BASE_NAME = "ClientBase";
 
 interface Options {
     classes: TSCode.ClassDefinition[];
-    importMapping: { [importName: string]: string };
     classMapping?: { [className: string]: string };
     libraryName: string;
 }
@@ -17,7 +17,7 @@ interface Options {
 export function getCodeFromClasses(options: Options) {
     const fileForWrite = TSCode.createFile();
     const types = new TypesDictionary();
-    const {libraryName, classes, importMapping} = options;
+    const {libraryName, classes} = options;
 
     classes.forEach((c) => {
         fileForWrite.addClass({
@@ -64,25 +64,15 @@ export function getCodeFromClasses(options: Options) {
         moduleSpecifier: libraryName
     });
 
-    Object.keys(types.getTypes()).forEach(typeName => {
-        if (typeName === CLIENT_BASE_NAME) {
-            throw new Error(`Having a type with the name ClientBase is currently not supported. Please use a different type name.`);
-        }
-        else if (importMapping[typeName] == null) {
-            throw new Error(`An import mapping needs to be specified on the options parameter for '${typeName}' when calling getGeneratedCode()`);
-        }
-
-        fileForWrite.addImport({
-            namedImports: [{ name: typeName }],
-            moduleSpecifier: importMapping[typeName]
-        });
-    });
+    const referencedTypes = types.getTypes();
+    verifyNoTypeWithClientBaseName(referencedTypes);
+    fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
 
     return fileForWrite.write();
 }
 
 function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
-    const parser = new RouteParser(methodDecorator.arguments.length > 0 ? stripQuotes(methodDecorator.arguments[0].text) : null);
+    const parser = new RouteParser(methodDecorator.arguments.length > 0 ? stripQuotes(methodDecorator.arguments[0].text) : method.name);
     const urlParameterNames = parser.getParameterNames();
 
     verifyMethodHasParameterNames(method, urlParameterNames);
@@ -106,10 +96,29 @@ function getReturnType(method: TSCode.ClassMethodDefinition) {
     return stripPromiseFromString(returnType);
 }
 
+function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
+    const interfaceFromTypeGenerator = new InterfaceFromTypeGenerator();
+    const interfaces: TSCode.InterfaceDefinition[] = [];
+
+    types.forEach(typeDef => {
+        interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
+    });
+
+    return interfaces;
+}
+
 function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {
     paramNames.forEach(paramName => {
         if (!method.parameters.some(p => p.name === paramName)) {
             throw new Error(`The parameter ${paramName} specified in the route does not exist on the method ${method.name}`);
+        }
+    });
+}
+
+function verifyNoTypeWithClientBaseName(types: TSCode.TypeDefinition[]) {
+    types.forEach(typeDef => {
+        if (typeDef.text === CLIENT_BASE_NAME) {
+            throw new Error(`Having a type with the name ClientBase is currently not supported. Please use a different type name.`);
         }
     });
 }

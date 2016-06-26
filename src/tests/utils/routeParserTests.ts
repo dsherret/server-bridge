@@ -2,7 +2,7 @@
 import {RouteParser} from "./../../utils";
 
 describe("RouteParser", () => {
-    describe("constructor()", () => {
+    describe("#constructor()", () => {
         it("should throw an error when someone provides no value for a query param", () => {
             assert.throws(() => {
                 /* tslint:disable */
@@ -12,7 +12,7 @@ describe("RouteParser", () => {
         });
     });
 
-    describe("getParameterNames()", () => {
+    describe("#getParameterNames()", () => {
         it("should have no parameters when no parameters are specified", () => {
             const parser = new RouteParser("/notes/1");
             assert.equal(parser.getParameterNames().length, 0);
@@ -46,7 +46,7 @@ describe("RouteParser", () => {
         });
     });
 
-    describe("getUrlCodeString()", () => {
+    describe("#getUrlCodeString()", () => {
         it("should return a slash when the string is null", () => {
             const parser = new RouteParser(null);
             assert.equal(parser.getUrlCodeString(), `"/"`);

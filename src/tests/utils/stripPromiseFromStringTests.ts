@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import {stripPromiseFromString} from "./../../utils";
 
-describe("stripPromiseFromString", () => {
+describe("stripPromiseFromString()", () => {
     it("should get rid of the promise if it's the first index in the string", () => {
         assert.equal(stripPromiseFromString("Promise<string>"), "string");
     });
