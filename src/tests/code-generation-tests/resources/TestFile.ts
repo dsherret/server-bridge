@@ -11,7 +11,7 @@ export class NoteRoutes extends Routes {
     }
 
     @Get()
-    getMethodNoRoute() {
+    getMethodNoRoute(params: { text: string }) {
         // dummy code
         return new Promise<number>(() => 12);
     }

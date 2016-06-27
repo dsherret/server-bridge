@@ -49,8 +49,8 @@ export class NoteRoutes extends ClientBase {
         return super.get<number>("/" + encodeURIComponent(noteID));
     }
 
-    getMethodNoRoute() {
-        return super.get<number>("/getMethodNoRoute");
+    getMethodNoRoute(params: { text: string; }) {
+        return super.get<number>("/getMethodNoRoute", params);
     }
 
     postMethod(note: Note) {
