@@ -22,6 +22,8 @@ If there's something you would like open up an issue and I'll take a look at it.
 
 ## Example
 
+A simple client-server example can be found [here](https://github.com/dsherret/server-bridge-example).
+
 ### Server Side
 
 1. Install `server-bridge`:
@@ -44,12 +46,21 @@ If there's something you would like open up an issue and I'll take a look at it.
         // uses the method name for the path if none specified: /notes/getAll
         @Get()
         getAll() {
+            console.log("Client requested to get all the notes.");
             // if you need to do any async work here then return a Promise instead
             return NoteRoutes.memoryNoteStorage;
         }
 
+        @Get("/")
+        getAllWithText(params: { text: string; }) { // query parameters need to be stored in an object
+            const {text} = params;
+            console.log(`Client requested to get all the note containing text: ${text}.`);
+            return NoteRoutes.memoryNoteStorage.filter(n => n.text.indexOf(text) >= 0);
+        }
+
         @Post("/")
-        set(note: Note) {
+        add(note: Note) {
+            console.log("Client requested to add a note.");
             NoteRoutes.memoryNoteStorage.push(note);
         }
     }
@@ -118,7 +129,7 @@ export interface Note {
 }
 
 export class NoteApi extends ClientBase {
-    constructor(options?: {urlPrefix: string; }) {
+    constructor(options?: { urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
     }
 
@@ -126,8 +137,12 @@ export class NoteApi extends ClientBase {
         return super.get<Note[]>("/getAll");
     }
 
-    set(note: Note) {
-        return super.post<Note>("/", note);
+    getAllWithText(params: { text: string; }) {
+        return super.get<Note[]>("/", params);
+    }
+
+    add(note: Note) {
+        return super.post<void>("/", note);
     }
 }
 ```
