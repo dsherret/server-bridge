@@ -62,7 +62,7 @@ export class RouteParser {
 
     private handleString(str: string) {
         if (str[0] === ":") {
-            return `" + ${str.substr(1)} + "`;
+            return `" + encodeURIComponent(${str.substr(1)}) + "`;
         }
         else {
             return str;

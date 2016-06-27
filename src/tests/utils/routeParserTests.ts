@@ -94,17 +94,17 @@ describe("RouteParser", () => {
 
         it("should replace the url string values", () => {
             const parser = new RouteParser("/notes/:noteID");
-            assert.equal(parser.getUrlCodeString(), `"/notes/" + noteID`);
+            assert.equal(parser.getUrlCodeString(), `"/notes/" + encodeURIComponent(noteID)`);
         });
 
         it("should replace the query parameter values", () => {
             const parser = new RouteParser("/notes/1?myparam=:value&otherone=:other");
-            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=" + value + "&otherone=" + other`);
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?myparam=" + encodeURIComponent(value) + "&otherone=" + encodeURIComponent(other)`);
         });
 
         it("should replace the query parameter keys", () => {
             const parser = new RouteParser("/notes/1?:key=value&:other=other");
-            assert.equal(parser.getUrlCodeString(), `"/notes/1?" + key + "=value&" + other + "=other"`);
+            assert.equal(parser.getUrlCodeString(), `"/notes/1?" + encodeURIComponent(key) + "=value&" + encodeURIComponent(other) + "=other"`);
         });
     });
 });
