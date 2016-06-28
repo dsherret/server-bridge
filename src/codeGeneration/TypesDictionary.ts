@@ -27,9 +27,6 @@ export class TypesDictionary {
 
                 def.properties.forEach(prop => this.add(prop.type));
             }
-            else if (def.isTypeAliasDefinition()) {
-                this.add(def.type);
-            }
         });
 
         type.typeArguments.forEach(typeArg => {

@@ -5,8 +5,7 @@ import {TypesDictionary} from "./TypesDictionary";
 import {getClassPath} from "./getClassPath";
 import {InterfaceFromTypeGenerator} from "./InterfaceFromTypeGenerator";
 import {getMethodDecorator} from "./getMethodDecorator";
-
-const CLIENT_BASE_NAME = "ClientBase";
+import {CLIENT_BASE_NAME} from "./../constants";
 
 interface Options {
     classes: TSCode.ClassDefinition[];
@@ -23,7 +22,7 @@ export function getCodeFromClasses(options: Options) {
         fileForWrite.addClass({
             name: options.classMapping[c.name] || c.name,
             isExported: true,
-            extendsTypes: ["ClientBase"],
+            extendsTypes: [CLIENT_BASE_NAME],
             constructorDef: {
                 parameters: [{
                     name: "options",
@@ -37,12 +36,7 @@ export function getCodeFromClasses(options: Options) {
             methods: c.methods
                 .filter(m => m.scope === TSCode.Scope.Public)
                 .map(m => ({ decorator: getMethodDecorator(m), method: m }))
-                .filter(methodAndDecorator => {
-                    if (methodAndDecorator.decorator == null) {
-                        console.warn(`Ignoring method ${methodAndDecorator.method.name} because it did not have a Post or Get decorator.`);
-                    }
-                    return methodAndDecorator.decorator != null;
-                })
+                .filter(methodAndDecorator => methodAndDecorator.decorator != null)
                 .map(methodAndDecorator => ({
                     name: methodAndDecorator.method.name,
                     parameters: methodAndDecorator.method.parameters.map(param => {
@@ -65,7 +59,6 @@ export function getCodeFromClasses(options: Options) {
     });
 
     const referencedTypes = types.getTypes();
-    verifyNoTypeWithClientBaseName(referencedTypes);
     fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
 
     return fileForWrite.write();
@@ -91,9 +84,7 @@ function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodD
 }
 
 function getReturnType(method: TSCode.ClassMethodDefinition) {
-    let returnType = method.returnType == null ? "void" : method.returnType.text;
-
-    return stripPromiseFromString(returnType);
+    return stripPromiseFromString(method.returnType.text);
 }
 
 function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
@@ -111,14 +102,6 @@ function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, par
     paramNames.forEach(paramName => {
         if (!method.parameters.some(p => p.name === paramName)) {
             throw new Error(`The parameter ${paramName} specified in the route does not exist on the method ${method.name}`);
-        }
-    });
-}
-
-function verifyNoTypeWithClientBaseName(types: TSCode.TypeDefinition[]) {
-    types.forEach(typeDef => {
-        if (typeDef.text === CLIENT_BASE_NAME) {
-            throw new Error(`Having a type with the name ClientBase is currently not supported. Please use a different type name.`);
         }
     });
 }

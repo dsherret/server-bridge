@@ -16,8 +16,8 @@ export function Post(route: string = null) {
 }
 
 function baseMethodRoute(route: string, method: Method) {
-    return (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: Object) => Promise<any>>) => {
-        if (typeof route !== "string" || route.trim().length === 0) {
+    return (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: Object) => any>) => {
+        if (route == null) {
             route = methodName;
         }
 

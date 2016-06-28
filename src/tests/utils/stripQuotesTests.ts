@@ -18,7 +18,7 @@ describe("stripQuotes()", () => {
         assert.equal(stripQuotes(""), "");
     });
 
-    it("should return null when passed null", () => {
-        assert.equal(stripQuotes(null), null);
+    it("should return an empty string when passed null", () => {
+        assert.equal(stripQuotes(null), "");
     });
 });

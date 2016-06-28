@@ -1,11 +1,11 @@
 {
   "name": "server-bridge",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Code generation for a statically typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "typings": "server-bridge.d.ts",
   "scripts": {
-    "test": "gulp test",
+    "test": "gulp tslint && gulp test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build": "gulp typescript"
   },
   "repository": {
@@ -33,9 +33,12 @@
     "typescript": "^1.8.9"
   },
   "devDependencies": {
+    "coveralls": "^2.11.9",
     "del": "^2.1.0",
     "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
+    "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^4.1.1",
     "gulp-typescript": "^2.10.0",

@@ -28,11 +28,20 @@ export class BaseClass implements BaseInterface<string> {
     objectTypeAlias: ObjectTypeAlias;
 }
 
-export interface TypeAliasReferencedInterface {
+export interface ObjectTypeAliasReferencedInterface {
     prop: string;
 }
 
 export type ObjectTypeAlias = {
     name: string;
-    other?: TypeAliasReferencedInterface;
+    other?: ObjectTypeAliasReferencedInterface;
 };
+
+export type TypeAlias = {
+    myAliasProp: TypeAliasReferencedInterface;
+};
+
+export interface TypeAliasReferencedInterface {
+    prop: string;
+}
+
