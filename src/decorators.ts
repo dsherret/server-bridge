@@ -1,4 +1,4 @@
-import {Routes} from "./routes";
+import {Routes} from "./Routes";
 import {Method} from "./Method";
 
 export function Use(basePath: string = "") {
