@@ -1,6 +1,10 @@
 server-bridge
 =============
 
+[![npm version](https://badge.fury.io/js/server-bridge.svg)](https://badge.fury.io/js/server-bridge) [![Build Status](https://travis-ci.org/dsherret/server-bridge.svg?branch=master)](https://travis-ci.org/dsherret/server-bridge?branch=master)
+[![Coverage Status](https://coveralls.io/repos/dsherret/server-bridge/badge.svg?branch=master&service=github)](https://coveralls.io/github/dsherret/server-bridge?branch=master)
+
+
 Code generation for a statically typed bridge between the client and server.
 
 ## What does this library do?
