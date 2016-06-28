@@ -9,18 +9,22 @@ describe("decorators", () => {
         class MyClass extends Routes {
             @Get("get-string")
             myGetMethod() {
+                return new Promise<number>(() => 12);
             }
 
             @Post("post-string")
             myPostMethod() {
+                return new Promise<number>(() => 12);
             }
 
             @Get()
             myGetMethodNoRoute() {
+                return new Promise<number>(() => 12);
             }
 
             @Post()
             myPostMethodNoRoute() {
+                return new Promise<number>(() => 12);
             }
         }
 

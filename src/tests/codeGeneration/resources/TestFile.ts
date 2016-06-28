@@ -16,6 +16,7 @@ export class NoteRoutes extends Routes {
 
     @Post()
     postAliasMethod(alias: TypeAlias) {
+        return;
     }
 }
 

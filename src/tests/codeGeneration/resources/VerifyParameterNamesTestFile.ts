@@ -1,6 +1,5 @@
 ﻿/// <reference path="../../../typings/globals/es6-promise/index.d.ts" />
-import {Use, Get, Post, Routes} from "./../../../main";
-import {Note, TypeAlias} from "./TestTypes";
+import {Use, Get, Routes} from "./../../../main";
 
 @Use("/notes")
 export class NoteRoutes extends Routes {

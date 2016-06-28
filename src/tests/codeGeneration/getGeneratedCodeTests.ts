@@ -96,7 +96,7 @@ export class RoutesWithoutUse extends ClientBase {
 
     it("should error when it can't find any file that extends the base class name", () => {
         assert.throws(() => {
-            const actualCode = getGeneratedCode({
+            getGeneratedCode({
                 includeDocumentation: false,
                 files: []
             });
@@ -105,9 +105,9 @@ export class RoutesWithoutUse extends ClientBase {
 
     it("should error when specifying a parameter in the route that does not exist in the method", () => {
         assert.throws(() => {
-            const actualCode = getGeneratedCode({
+            getGeneratedCode({
                 includeDocumentation: false,
-                files: [path.resolve(__dirname, "./../../../src/tests/codeGeneration/resources/VerifyParameterNamesTestFile.ts")],
+                files: [path.resolve(__dirname, "./../../../src/tests/codeGeneration/resources/VerifyParameterNamesTestFile.ts")]
             });
         }, "The parameter noteID specified in the route does not exist on the method getMethod");
     });
