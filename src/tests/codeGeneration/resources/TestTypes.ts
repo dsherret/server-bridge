@@ -44,4 +44,3 @@ export type TypeAlias = {
 export interface TypeAliasReferencedInterface {
     prop: string;
 }
-
