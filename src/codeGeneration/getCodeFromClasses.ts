@@ -60,6 +60,9 @@ export function getCodeFromClasses(options: Options) {
 
     const referencedTypes = types.getTypes();
     fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
+    fileForWrite.interfaces.forEach((def, i) => {
+        fileForWrite.setOrderOfMember(i, def);
+    });
 
     return fileForWrite.write();
 }
