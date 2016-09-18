@@ -82,8 +82,19 @@ function getMethods(c: TSCode.ClassDefinition, onAddParam?: (param: TSCode.Class
             }),
             onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
                 writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
-            }
+            },
+            returnType: getReturnTypeFromText(methodAndDecorator.method.returnType.text)
         }));
+}
+
+function getReturnTypeFromText(returnTypeText: string) {
+    const isPromise = /^Promise<.*>$/.test(returnTypeText);
+
+    if (!isPromise) {
+        returnTypeText = `Promise<${returnTypeText}>`;
+    }
+
+    return returnTypeText;
 }
 
 function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {

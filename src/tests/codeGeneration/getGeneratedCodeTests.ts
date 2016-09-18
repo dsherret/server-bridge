@@ -10,13 +10,13 @@ describe("getGeneratedCode", () => {
 import {ClientBase} from "server-bridge-superagent-client";
 
 export interface INoteRoutes {
-    getMethod(noteID: number): void;
-    postMethod(note: Note): void;
-    postAliasMethod(alias: { myAliasProp: TypeAliasReferencedInterface; }): void;
+    getMethod(noteID: number): Promise<number>;
+    postMethod(note: Note): Promise<number>;
+    postAliasMethod(alias: { myAliasProp: TypeAliasReferencedInterface; }): Promise<void>;
 }
 
 export interface IRoutesWithoutUse {
-    getMethodNoRoute(params: { text: string; }): void;
+    getMethodNoRoute(params: { text: string; }): Promise<number>;
 }
 
 export interface Note extends BaseInterface<TypeArgInterface> {
