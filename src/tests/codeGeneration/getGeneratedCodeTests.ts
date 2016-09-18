@@ -5,7 +5,9 @@ import {getGeneratedCode} from "./../../main";
 
 describe("getGeneratedCode", () => {
     const expectedCode =
-`import {ClientBase} from "server-bridge-superagent-client";
+`/* tslint:disable */
+// ReSharper disable All
+import {ClientBase} from "server-bridge-superagent-client";
 
 export interface INoteRoutes {
     getMethod(noteID: number): void;

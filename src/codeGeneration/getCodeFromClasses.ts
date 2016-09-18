@@ -46,6 +46,10 @@ export function getCodeFromClasses(options: Options) {
         });
     });
 
+    fileForWrite.onBeforeWrite = writer => writer
+        .writeLine("/* tslint:disable */")
+        .writeLine("// ReSharper disable All");
+
     fileForWrite.addImport({
         namedImports: [{ name: CLIENT_BASE_NAME }],
         moduleSpecifier: libraryName
@@ -62,24 +66,24 @@ export function getCodeFromClasses(options: Options) {
 
 function getMethods(c: TSCode.ClassDefinition, onAddParam?: (param: TSCode.ClassMethodParameterDefinition) => void) {
     return c.methods
-            .filter(m => m.scope === TSCode.Scope.Public)
-            .map(m => ({ decorator: getMethodDecorator(m), method: m }))
-            .filter(methodAndDecorator => methodAndDecorator.decorator != null)
-            .map(methodAndDecorator => ({
-                name: methodAndDecorator.method.name,
-                parameters: methodAndDecorator.method.parameters.map(param => {
-                    if (onAddParam != null) {
-                        onAddParam(param);
-                    }
-                    return {
-                        name: param.name,
-                        type: param.type.text
-                    };
-                }),
-                onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
-                    writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
+        .filter(m => m.scope === TSCode.Scope.Public)
+        .map(m => ({ decorator: getMethodDecorator(m), method: m }))
+        .filter(methodAndDecorator => methodAndDecorator.decorator != null)
+        .map(methodAndDecorator => ({
+            name: methodAndDecorator.method.name,
+            parameters: methodAndDecorator.method.parameters.map(param => {
+                if (onAddParam != null) {
+                    onAddParam(param);
                 }
-            }))
+                return {
+                    name: param.name,
+                    type: param.type.text
+                };
+            }),
+            onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
+                writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
+            }
+        }));
 }
 
 function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
