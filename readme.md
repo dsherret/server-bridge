@@ -132,7 +132,13 @@ export interface Note {
     creationDate: Date;
 }
 
-export class NoteApi extends ClientBase {
+export interface INoteApi {
+    getAll(): Promise<Note[]>;
+    getAllWithText(params: { text: string; }): Promise<Note[]>;
+    add(note: Note): Promise<void>;
+}
+
+export class NoteApi extends ClientBase implements INoteApi {
     constructor(options?: { urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
     }

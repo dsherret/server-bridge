@@ -7,6 +7,16 @@ describe("getGeneratedCode", () => {
     const expectedCode =
 `import {ClientBase} from "server-bridge-superagent-client";
 
+export interface INoteRoutes {
+    getMethod(noteID: number): void;
+    postMethod(note: Note): void;
+    postAliasMethod(alias: { myAliasProp: TypeAliasReferencedInterface; }): void;
+}
+
+export interface IRoutesWithoutUse {
+    getMethodNoRoute(params: { text: string; }): void;
+}
+
 export interface Note extends BaseInterface<TypeArgInterface> {
     referencedProp: ReferencedProp;
 }
@@ -45,7 +55,7 @@ export interface TypeAliasReferencedInterface {
     prop: string;
 }
 
-export class NoteRoutes extends ClientBase {
+export class NoteRoutes extends ClientBase implements INoteRoutes {
     constructor(options?: { urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
     }
@@ -63,7 +73,7 @@ export class NoteRoutes extends ClientBase {
     }
 }
 
-export class RoutesWithoutUse extends ClientBase {
+export class RoutesWithoutUse extends ClientBase implements IRoutesWithoutUse {
     constructor(options?: { urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "");
     }

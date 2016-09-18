@@ -19,10 +19,13 @@ export function getCodeFromClasses(options: Options) {
     const {libraryName, classes} = options;
 
     classes.forEach((c) => {
+        const name = options.classMapping[c.name] || c.name;
+
         fileForWrite.addClass({
-            name: options.classMapping[c.name] || c.name,
+            name,
             isExported: true,
             extendsTypes: [CLIENT_BASE_NAME],
+            implementsTypes: ["I" + name],
             constructorDef: {
                 parameters: [{
                     name: "options",
@@ -33,23 +36,13 @@ export function getCodeFromClasses(options: Options) {
                     functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${stripQuotes(getClassPath(c))}");`);
                 }
             },
-            methods: c.methods
-                .filter(m => m.scope === TSCode.Scope.Public)
-                .map(m => ({ decorator: getMethodDecorator(m), method: m }))
-                .filter(methodAndDecorator => methodAndDecorator.decorator != null)
-                .map(methodAndDecorator => ({
-                    name: methodAndDecorator.method.name,
-                    parameters: methodAndDecorator.method.parameters.map(param => {
-                        types.add(param.type);
-                        return {
-                            name: param.name,
-                            type: param.type.text
-                        };
-                    }),
-                    onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
-                        writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
-                    }
-                }))
+            methods: getMethods(c, param => types.add(param.type))
+        });
+
+        fileForWrite.addInterface({
+            name: "I" + name,
+            isExported: true,
+            methods: getMethods(c)
         });
     });
 
@@ -65,6 +58,28 @@ export function getCodeFromClasses(options: Options) {
     });
 
     return fileForWrite.write();
+}
+
+function getMethods(c: TSCode.ClassDefinition, onAddParam?: (param: TSCode.ClassMethodParameterDefinition) => void) {
+    return c.methods
+            .filter(m => m.scope === TSCode.Scope.Public)
+            .map(m => ({ decorator: getMethodDecorator(m), method: m }))
+            .filter(methodAndDecorator => methodAndDecorator.decorator != null)
+            .map(methodAndDecorator => ({
+                name: methodAndDecorator.method.name,
+                parameters: methodAndDecorator.method.parameters.map(param => {
+                    if (onAddParam != null) {
+                        onAddParam(param);
+                    }
+                    return {
+                        name: param.name,
+                        type: param.type.text
+                    };
+                }),
+                onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
+                    writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
+                }
+            }))
 }
 
 function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
