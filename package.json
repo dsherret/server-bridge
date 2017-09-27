@@ -27,22 +27,30 @@
   "typescript": {
     "definition": "server-bridge.d.ts"
   },
+  "peerDependencies": {
+    "ts-simple-ast": "^0.68.0",
+    "typescript": "^2.5.2"
+  },
   "dependencies": {
     "code-block-writer": "^4.0.0",
-    "ts-type-info": "^5.0.0",
-    "typescript": "^1.8.9"
+    "typescript": "^2.5.2",
+    "ts-simple-ast": "^0.68.0"
   },
   "devDependencies": {
-    "coveralls": "^2.11.9",
-    "del": "^2.1.0",
+    "@types/es6-promise": "0.0.32",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.41",
+    "code-block-writer": "^4.2.1",
+    "coveralls": "^2.13.1",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.0.0",
-    "gulp-mocha": "^2.2.0",
-    "gulp-replace": "^0.5.4",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^4.1.1",
-    "gulp-typescript": "^2.10.0",
-    "mocha": "^2.3.4",
-    "tslint": "^3.1.1"
+    "gulp-istanbul": "^1.1.2",
+    "gulp-mocha": "^4.3.1",
+    "gulp-replace": "^0.6.1",
+    "gulp-tslint": "^8.1.2",
+    "gulp-typescript": "^3.2.2",
+    "mocha": "^3.5.3",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
   }
 }

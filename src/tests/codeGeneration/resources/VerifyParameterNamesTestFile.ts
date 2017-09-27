@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../typings/globals/es6-promise/index.d.ts" />
+﻿/// <reference path="../../../../node_modules/@types/es6-promise/index.d.ts" />
 import {Use, Get, Routes} from "./../../../main";
 
 @Use("/notes")

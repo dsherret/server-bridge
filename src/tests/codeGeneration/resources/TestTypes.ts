@@ -19,13 +19,13 @@ export interface ReferencedProp {
     prop: string;
 }
 
-export class MyClass extends BaseClass {
-    prop: string;
-}
-
 export class BaseClass implements BaseInterface<string> {
     baseProp: string;
     objectTypeAlias: ObjectTypeAlias;
+}
+
+export class MyClass extends BaseClass {
+    prop: string;
 }
 
 export interface ObjectTypeAliasReferencedInterface {
@@ -43,4 +43,9 @@ export type TypeAlias = {
 
 export interface TypeAliasReferencedInterface {
     prop: string;
+}
+
+export enum MyEnum {
+    Member1 = 3,
+    Member2 = 5
 }

@@ -1,89 +1,94 @@
 import CodeBlockWriter from "code-block-writer";
-import * as TSCode from "ts-type-info";
+import Ast, {SourceFile, ClassDeclaration, Type, InterfaceDeclaration, TypeAliasDeclaration, EnumDeclaration, MethodDeclaration, Decorator, MethodDeclarationStructure,
+    ParameterDeclaration, Scope} from "ts-simple-ast";
 import {stripPromiseFromString, stripQuotes, RouteParser} from "./../utils";
 import {TypesDictionary} from "./TypesDictionary";
 import {getClassPath} from "./getClassPath";
-import {InterfaceFromTypeGenerator} from "./InterfaceFromTypeGenerator";
+import {DefinitionFromTypeGenerator} from "./DefinitionFromTypeGenerator";
 import {getMethodDecorator} from "./getMethodDecorator";
 import {CLIENT_BASE_NAME} from "./../constants";
 
 interface Options {
-    classes: TSCode.ClassDefinition[];
+    classes: ClassDeclaration[];
     classMapping?: { [className: string]: string };
     libraryName: string;
 }
 
-export function getCodeFromClasses(options: Options) {
-    const fileForWrite = TSCode.createFile();
-    const types = new TypesDictionary();
-    const {libraryName, classes} = options;
+export function getCodeFromClasses(ast: Ast, options: Options) {
+    const fileForWrite = ast.addSourceFileFromText("serverBridgeTempFile.ts", "");
+    try {
+        const types = new TypesDictionary();
+        const {libraryName, classes} = options;
 
-    classes.forEach((c) => {
-        const name = options.classMapping[c.name] || c.name;
+        classes.forEach((c) => {
+            const name = options.classMapping[c.getName()] || c.getName();
 
-        fileForWrite.addClass({
-            name,
-            isExported: true,
-            extendsTypes: [CLIENT_BASE_NAME],
-            implementsTypes: ["I" + name],
-            constructorDef: {
-                parameters: [{
-                    name: "options",
-                    isOptional: true,
-                    type: "{ urlPrefix: string; }"
-                }],
-                onWriteFunctionBody: functionWriter => {
-                    functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${stripQuotes(getClassPath(c))}");`);
-                }
-            },
-            methods: getMethods(c, param => types.add(param.type))
+            fileForWrite.addClass({
+                name,
+                isExported: true,
+                extends: CLIENT_BASE_NAME,
+                implements: ["I" + name],
+                ctor: {
+                    parameters: [{
+                        name: "options",
+                        hasQuestionToken: true,
+                        type: "{ urlPrefix: string; }"
+                    }],
+                    bodyText: functionWriter => {
+                        functionWriter.write(`super((options == null ? "" : (options.urlPrefix || "")) + "${stripQuotes(getClassPath(c))}");`);
+                    }
+                },
+                methods: getMethods(c, param => {
+                    if (param.getTypeNode() != null)
+                        types.add(param.getType())
+                })
+            });
+
+            fileForWrite.addInterface({
+                name: "I" + name,
+                isExported: true,
+                methods: getMethods(c)
+            });
         });
 
-        fileForWrite.addInterface({
-            name: "I" + name,
-            isExported: true,
-            methods: getMethods(c)
+        fileForWrite.addImport({
+            namedImports: [{ name: CLIENT_BASE_NAME }],
+            moduleSpecifier: libraryName
         });
-    });
 
-    fileForWrite.onBeforeWrite = writer => writer
-        .writeLine("/* tslint:disable */")
-        .writeLine("// ReSharper disable All");
+        const referencedTypes = types.getTypes();
+        fillFileWithTypesAsDeclarations(fileForWrite, referencedTypes);
 
-    fileForWrite.addImport({
-        namedImports: [{ name: CLIENT_BASE_NAME }],
-        moduleSpecifier: libraryName
-    });
+        fileForWrite.insertText(0, writer => writer.writeLine("/* tslint:disable */")
+            .writeLine("// ReSharper disable All"));
 
-    const referencedTypes = types.getTypes();
-    fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
-    fileForWrite.interfaces.forEach((def, i) => {
-        fileForWrite.setOrderOfMember(i, def);
-    });
-
-    return fileForWrite.write();
+        return fileForWrite.getFullText();
+    }
+    finally {
+        ast.removeSourceFile(fileForWrite);
+    }
 }
 
-function getMethods(c: TSCode.ClassDefinition, onAddParam?: (param: TSCode.ClassMethodParameterDefinition) => void) {
-    return c.methods
-        .filter(m => m.scope === TSCode.Scope.Public)
+function getMethods(c: ClassDeclaration, onAddParam?: (param: ParameterDeclaration) => void): MethodDeclarationStructure[] {
+    return c.getInstanceMethods()
+        .filter(m => m.getScope() === Scope.Public)
         .map(m => ({ decorator: getMethodDecorator(m), method: m }))
         .filter(methodAndDecorator => methodAndDecorator.decorator != null)
         .map(methodAndDecorator => ({
-            name: methodAndDecorator.method.name,
-            parameters: methodAndDecorator.method.parameters.map(param => {
-                if (onAddParam != null) {
+            name: methodAndDecorator.method.getName(),
+            parameters: methodAndDecorator.method.getParameters().map(param => {
+                if (onAddParam != null)
                     onAddParam(param);
-                }
                 return {
-                    name: param.name,
-                    type: param.type.text
+                    name: param.getName(),
+                    type: param.getTypeNode() != null ? param.getTypeNode().getText() : undefined
                 };
             }),
-            onWriteFunctionBody: (methodWriter: CodeBlockWriter) => {
+            bodyText: (methodWriter: CodeBlockWriter) => {
                 writeBaseStatement(methodWriter, methodAndDecorator.method, methodAndDecorator.decorator);
             },
-            returnType: getReturnTypeFromText(methodAndDecorator.method.returnType.text)
+            returnType: getReturnTypeFromText(methodAndDecorator.method.getReturnTypeNode() != null ? methodAndDecorator.method.getReturnTypeNode().getText()
+                : methodAndDecorator.method.getReturnType().getText())
         }));
 }
 
@@ -97,44 +102,40 @@ function getReturnTypeFromText(returnTypeText: string) {
     return returnTypeText;
 }
 
-function writeBaseStatement(writer: CodeBlockWriter, method: TSCode.ClassMethodDefinition, methodDecorator: TSCode.DecoratorDefinition) {
-    const parser = new RouteParser(methodDecorator.arguments.length > 0 ? stripQuotes(methodDecorator.arguments[0].text) : method.name);
+function writeBaseStatement(writer: CodeBlockWriter, method: MethodDeclaration, methodDecorator: Decorator) {
+    const parser = new RouteParser(methodDecorator.getArguments().length > 0 ? stripQuotes(methodDecorator.getArguments()[0].getText()) : method.getName());
     const urlParameterNames = parser.getParameterNames();
 
     verifyMethodHasParameterNames(method, urlParameterNames);
 
-    writer.write(`return super.${methodDecorator.name.toLowerCase()}<${getReturnType(method)}>(`);
+    writer.write(`return super.${methodDecorator.getName().toLowerCase()}<${getReturnType(method)}>(`);
     writer.write(`${parser.getUrlCodeString()}`);
 
-    method.parameters.forEach(parameter => {
-        if (!urlParameterNames.some(name => name === parameter.name)) {
+    method.getParameters().forEach(parameter => {
+        if (!urlParameterNames.some(name => name === parameter.getName())) {
             writer.write(", ");
-            writer.write(parameter.name);
+            writer.write(parameter.getName());
         }
     });
 
     writer.write(`);`);
 }
 
-function getReturnType(method: TSCode.ClassMethodDefinition) {
-    return stripPromiseFromString(method.returnType.text);
+function getReturnType(method: MethodDeclaration) {
+    const returnTypeNode = method.getReturnTypeNode();
+    return stripPromiseFromString(returnTypeNode == null ? method.getReturnType().getText() : returnTypeNode.getText());
 }
 
-function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
-    const interfaceFromTypeGenerator = new InterfaceFromTypeGenerator();
-    const interfaces: TSCode.InterfaceDefinition[] = [];
-
-    types.forEach(typeDef => {
-        interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
-    });
-
-    return interfaces;
+function fillFileWithTypesAsDeclarations(fileForWrite: SourceFile, types: Type[]) {
+    const definitionFromTypeGenerator = new DefinitionFromTypeGenerator(fileForWrite);
+    for (const typeDef of types) {
+        definitionFromTypeGenerator.fillFileForType(typeDef);
+    }
 }
 
-function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {
+function verifyMethodHasParameterNames(method: MethodDeclaration, paramNames: string[]) {
     paramNames.forEach(paramName => {
-        if (!method.parameters.some(p => p.name === paramName)) {
-            throw new Error(`The parameter ${paramName} specified in the route does not exist on the method ${method.name}`);
-        }
+        if (!method.getParameters().some(p => p.getName() === paramName))
+            throw new Error(`The parameter ${paramName} specified in the route does not exist on the method ${method.getName()}`);
     });
 }

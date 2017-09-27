@@ -3,6 +3,7 @@ server-bridge
 
 [![npm version](https://badge.fury.io/js/server-bridge.svg)](https://badge.fury.io/js/server-bridge) [![Build Status](https://travis-ci.org/dsherret/server-bridge.svg?branch=master)](https://travis-ci.org/dsherret/server-bridge?branch=master)
 [![Coverage Status](https://coveralls.io/repos/dsherret/server-bridge/badge.svg?branch=master&service=github)](https://coveralls.io/github/dsherret/server-bridge?branch=master)
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 
 Code generation for a statically typed bridge between the client and server.
@@ -174,7 +175,7 @@ ES6 promises are used in the client application. If you are using an environment
 
 ```
 npm install es6-promise --save
-typings install dt~es6-promise --save --global
+npm install @types/es6-promise --save-dev 
 ```
 
 And run the polyfill by running the following code when your application starts:

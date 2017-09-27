@@ -1,15 +1,10 @@
-import * as TSCode from "ts-type-info";
+import {ClassDeclaration} from "ts-simple-ast";
 import {USE_DECORATOR_NAME} from "./../constants";
 
-export function getClassPath(classDef: TSCode.ClassDefinition) {
-    let usePath = "";
-
-    for (const decorator of classDef.decorators) {
-        if (decorator.name === USE_DECORATOR_NAME && decorator.arguments.length > 0) {
-            usePath = decorator.arguments[0].text;
-            break;
-        }
+export function getClassPath(classDec: ClassDeclaration) {
+    for (const decorator of classDec.getDecorators()) {
+        if (decorator.getName() === USE_DECORATOR_NAME && decorator.getArguments().length > 0)
+            return decorator.getArguments()[0].getText();
     }
-
-    return usePath;
+    return "";
 }

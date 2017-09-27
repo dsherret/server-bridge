@@ -4,7 +4,6 @@ var istanbul = require("gulp-istanbul");
 var mocha = require("gulp-mocha");
 var ts = require("gulp-typescript");
 var tslint = require("gulp-tslint");
-var sourcemaps = require("gulp-sourcemaps");
 var replace = require("gulp-replace");
 var p = require("./package.json");
 
@@ -14,14 +13,12 @@ gulp.task("typescript", ["clean-scripts"], function() {
     });
 
     return gulp.src(["./src/**/*.ts", "!src/tests/**/resources/*.ts"])
-        .pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
+        .pipe(tsProject())
         .pipe(replace(/(}\)\()(.*\|\|.*;)/g, '$1/* istanbul ignore next */$2'))
         .pipe(replace(/(var __extends = \(this && this.__extends\))/g, '$1/* istanbul ignore next */'))
         .pipe(replace(/(if \(!exports.hasOwnProperty\(p\)\))/g, '/* istanbul ignore else */ $1'))
         // ignore empty constructors (for mixins and static classes)
         .pipe(replace(/(function [A-Za-z]+\(\) {[\s\n\t]+})/g, '/* istanbul ignore next */ $1'))
-        .pipe(sourcemaps.write("./"))
         .pipe(gulp.dest("./dist"));
 });
 
@@ -49,8 +46,8 @@ gulp.task("test", ["pre-test"], function() {
 
 gulp.task("tslint", function() {
     return gulp.src(["./src/**/*.ts", "!./src/typings/**/*.d.ts"])
-        .pipe(tslint())
-        .pipe(tslint.report("verbose"));
+        .pipe(tslint({ formatter: "verbose" }))
+        .pipe(tslint.report());
 });
 
 gulp.task("watch", function() {

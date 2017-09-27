@@ -1,6 +1,6 @@
-/// <reference path="../../../typings/globals/es6-promise/index.d.ts" />
+/// <reference path="../../../../node_modules/@types/es6-promise/index.d.ts" />
 import {Use, Get, Post, Routes} from "./../../../main";
-import {Note, TypeAlias} from "./TestTypes";
+import {Note, TypeAlias, MyEnum} from "./TestTypes";
 
 @Use("/notes")
 export class NoteRoutes extends Routes {
@@ -18,11 +18,16 @@ export class NoteRoutes extends Routes {
     postAliasMethod(alias: TypeAlias) {
         return;
     }
+
+    @Post()
+    postEnumMethod(myEnum: MyEnum) {
+        return;
+    }
 }
 
 export class RoutesWithoutUse extends Routes {
     @Get()
-    getMethodNoRoute(params: { text: string }) {
+    getMethodNoRoute(params: { text: string; }) {
         return new Promise<number>(() => 12);
     }
 }
