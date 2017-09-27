@@ -147,7 +147,7 @@ export enum MyEnum {
             const ast = getAst();
             ast.addSourceFiles(path.resolve(__dirname, "./../../../src/tests/codeGeneration/resources/VerifyParameterNamesTestFile.ts"));
             getGeneratedCode(ast, {
-                includeDocumentation: false,
+                includeDocumentation: false
             });
         }, "The parameter noteID specified in the route does not exist on the method getMethod");
     });

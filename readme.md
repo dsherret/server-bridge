@@ -6,7 +6,7 @@ server-bridge
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 
-Code generation for a statically typed bridge between the client and server.
+Proof of concept. Code generation for a statically typed bridge between the client and server.
 
 ## What does this library do?
 
@@ -101,15 +101,25 @@ A simple client-server example can be found [here](https://github.com/dsherret/s
 
 ### Client Side
 
-1. Generate client side code from the server side code:
+1. Install `ts-simple-ast` and its corresponding TypeScript peer dependency:
+
+    ```typescript
+    npm install --save-dev ts-simple-ast
+    ```
+
+2. Generate client side code from the server side code:
 
     ```typescript
     import * as fs from "fs";
     import {getGeneratedCode} from "server-bridge";
+    import Ast from "ts-simple-ast";
+
+    // create an ast and add the source files from your project
+    const ast = new Ast();
+    ast.addSourceFiles("src/**/*.ts");
 
     // get the generated code
-    const clientSideCode = getGeneratedCode({
-        files: ["src/NoteRoutes.ts"],
+    const clientSideCode = getGeneratedCode(ast, {
         classMapping: { "NoteRoutes": "NoteApi" },
         libraryName: "server-bridge-superagent-client"
     });
@@ -117,7 +127,7 @@ A simple client-server example can be found [here](https://github.com/dsherret/s
     fs.writeFile("../client/src/server.ts", clientSideCode);
     ```
 
-2. Install `server-bridge-superagent-client` in the client application by running:
+3. Install `server-bridge-superagent-client` in the client application by running:
 
     ```
     npm install server-bridge-superagent-client --save

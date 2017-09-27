@@ -34,7 +34,7 @@ export class TypesDictionary {
                 // properties
                 for (const property of declaration.getInstanceProperties()) {
                     if (TypeGuards.isPropertyDeclaration(property) || TypeGuards.isParameterDeclaration(property))
-                        this.add(property.getType())
+                        this.add(property.getType());
                     else if (TypeGuards.isGetAccessorDeclaration(property))
                         this.add(property.getReturnType());
                 }
@@ -45,7 +45,7 @@ export class TypesDictionary {
                     this.handleExpressionWithTypeArguments(extendsExpr);
                 // properties
                 for (const property of declaration.getProperties())
-                    this.add(property.getType())
+                    this.add(property.getType());
             }
             else if (TypeGuards.isTypeAliasDeclaration(declaration)) {
                 this.add(declaration.getType());

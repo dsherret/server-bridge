@@ -11,14 +11,13 @@
             true,
             "check-space"
         ],
-        "curly": true,
+        "curly": false,
         "eofline": true,
         "forin": true,
         "indent": [ true, "spaces" ],
         "interface-name": false,
         "jsdoc-format": true,
         "label-position": true,
-        "label-undefined": true,
         "max-line-length": [ true, 170 ],
         "member-ordering": [
             false,
@@ -39,7 +38,6 @@
         "no-construct": true,
         "no-constructor-vars": false,
         "no-debugger": true,
-        "no-duplicate-key": true,
         "no-shadowed-variable": true,
         "no-duplicate-variable": true,
         "no-empty": true,
@@ -53,10 +51,7 @@
           "multiline": "never"
         }],
         "no-trailing-whitespace": true,
-        "no-unreachable": true,
         "no-unused-expression": true,
-        "no-unused-variable": true,
-        "no-use-before-declare": true,
         "no-var-keyword": true,
         "no-var-requires": true,
         "one-line": [

@@ -74,8 +74,9 @@ export class DefinitionFromTypeGenerator {
             extends: extendsClause,
             properties: dec.getInstanceProperties().filter(p => !TypeGuards.isSetAccessorDeclaration(p)).map(p => ({
                 name: p.getName(),
-                type: TypeGuards.isGetAccessorDeclaration(p) || TypeGuards.isSetAccessorDeclaration(p) ? (p.getReturnTypeNode() != null ? p.getReturnTypeNode().getText() : undefined) :
-                    (p.getTypeNode() != null ? p.getTypeNode().getText() : undefined),
+                type: TypeGuards.isGetAccessorDeclaration(p) || TypeGuards.isSetAccessorDeclaration(p)
+                    ? (p.getReturnTypeNode() != null ? p.getReturnTypeNode().getText() : undefined)
+                    : (p.getTypeNode() != null ? p.getTypeNode().getText() : undefined),
                 hasQuestionToken: TypeGuards.isGetAccessorDeclaration(p) || TypeGuards.isSetAccessorDeclaration(p) ? false : p.hasQuestionToken()
             })),
             typeParameters: dec.getTypeParameters().map(p => ({

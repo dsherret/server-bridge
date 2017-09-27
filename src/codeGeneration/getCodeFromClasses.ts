@@ -8,6 +8,8 @@ import {DefinitionFromTypeGenerator} from "./DefinitionFromTypeGenerator";
 import {getMethodDecorator} from "./getMethodDecorator";
 import {CLIENT_BASE_NAME} from "./../constants";
 
+// NOTE: This code is bad! I wrote it many years ago. I would not recommend doing code generation this way.
+
 interface Options {
     classes: ClassDeclaration[];
     classMapping?: { [className: string]: string };
@@ -40,7 +42,7 @@ export function getCodeFromClasses(ast: Ast, options: Options) {
                 },
                 methods: getMethods(c, param => {
                     if (param.getTypeNode() != null)
-                        types.add(param.getType())
+                        types.add(param.getType());
                 })
             });
 
