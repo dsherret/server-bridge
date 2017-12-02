@@ -33,7 +33,7 @@ gulp.task("pre-test", ["typescript"], function () {
 
 gulp.task("test", ["pre-test"], function() {
     return gulp.src(["dist/tests/**/*.js", "!dist/tests/**/resources/*.js"])
-        .pipe(mocha({ reporter: "progress" }))
+        .pipe(mocha({ reporter: "progress", timeout: 10000 }))
         .pipe(istanbul.writeReports())
         .pipe(istanbul.enforceThresholds({
             thresholds: {
