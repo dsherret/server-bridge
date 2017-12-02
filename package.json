@@ -1,6 +1,6 @@
 {
   "name": "server-bridge",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Code generation for a statically typed bridge between the client and server in TypeScript.",
   "main": "dist/main.js",
   "typings": "server-bridge.d.ts",

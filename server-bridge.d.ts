@@ -16,7 +16,7 @@ export class Routes {
 }
 
 export function getGeneratedCode(options: Options): string;
-export function Get(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(obj: any) => any>) => void;
+export function Get(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(obj?: any) => any>) => void;
 export function Post(route?: string): (target: Routes, methodName: string, descriptor: TypedPropertyDescriptor<(sentObject: any) => any>) => void;
 export function Use(basePath?: string): (target: typeof Routes) => void;
 
