@@ -5,6 +5,7 @@ var mocha = require("gulp-mocha");
 var ts = require("gulp-typescript");
 var tslint = require("gulp-tslint");
 var replace = require("gulp-replace");
+var merge = require("merge2");
 var p = require("./package.json");
 
 gulp.task("typescript", ["clean-scripts"], function() {
@@ -12,14 +13,18 @@ gulp.task("typescript", ["clean-scripts"], function() {
         typescript: require("typescript")
     });
 
-    return gulp.src(["./src/**/*.ts", "!src/tests/**/resources/*.ts"])
-        .pipe(tsProject())
-        .pipe(replace(/(}\)\()(.*\|\|.*;)/g, '$1/* istanbul ignore next */$2'))
-        .pipe(replace(/(var __extends = \(this && this.__extends\))/g, '$1/* istanbul ignore next */'))
-        .pipe(replace(/(if \(!exports.hasOwnProperty\(p\)\))/g, '/* istanbul ignore else */ $1'))
-        // ignore empty constructors (for mixins and static classes)
-        .pipe(replace(/(function [A-Za-z]+\(\) {[\s\n\t]+})/g, '/* istanbul ignore next */ $1'))
-        .pipe(gulp.dest("./dist"));
+    var tsResult = gulp.src(["./src/**/*.ts"])
+        .pipe(tsProject());
+
+    return merge([
+        tsResult.dts.pipe(gulp.dest('./dist')),
+        tsResult.js.pipe(replace(/(}\)\()(.*\|\|.*;)/g, '$1/* istanbul ignore next */$2'))
+            .pipe(replace(/(var __[a-z]+ = \(this && this.__[a-z]+\))/g, '$1/* istanbul ignore next */'))
+            .pipe(replace(/(if \(!exports.hasOwnProperty\(p\)\))/g, '/* istanbul ignore else */ $1'))
+            // ignore empty constructors (for mixins and static classes)
+            .pipe(replace(/(function [A-Za-z]+\(\) {[\s\n\t]+})/g, '/* istanbul ignore next */ $1'))
+            .pipe(gulp.dest("./dist"))
+    ]);
 });
 
 gulp.task("pre-test", ["typescript"], function () {
