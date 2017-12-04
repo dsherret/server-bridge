@@ -58,11 +58,15 @@ export function getCodeFromClasses(options: Options) {
     const referencedTypes = types.getTypes();
     fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
     fileForWrite.enums.push(...getEnumsFromTypes(referencedTypes));
+    fileForWrite.typeAliases.push(...getTypeAliasesFromTypes(referencedTypes));
     fileForWrite.interfaces.forEach((def, i) => {
         fileForWrite.setOrderOfMember(i, def);
     });
     fileForWrite.enums.forEach((def, i) => {
         fileForWrite.setOrderOfMember(fileForWrite.interfaces.length + i, def);
+    });
+    fileForWrite.typeAliases.forEach((def, i) => {
+        fileForWrite.setOrderOfMember(fileForWrite.interfaces.length + fileForWrite.enums.length + i, def);
     });
 
     return fileForWrite.write();
@@ -128,7 +132,7 @@ function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
     const interfaceFromTypeGenerator = new InterfaceFromTypeGenerator();
     const interfaces: TSCode.InterfaceDefinition[] = [];
 
-    types.filter(typeDef => !typeDef.definitions.some(t => t.isEnumDefinition())).forEach(typeDef => {
+    types.filter(typeDef => !typeDef.definitions.some(t => t instanceof TSCode.EnumDefinition || t instanceof TSCode.TypeAliasDefinition)).forEach(typeDef => {
         interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
     });
 
@@ -140,12 +144,25 @@ function getEnumsFromTypes(types: TSCode.TypeDefinition[]) {
 
     types.forEach(typeDef => {
         typeDef.definitions.forEach(def => {
-            if (def.isEnumDefinition())
+            if (def instanceof TSCode.EnumDefinition)
                 enums.push(def);
         });
     });
 
     return enums;
+}
+
+function getTypeAliasesFromTypes(types: TSCode.TypeDefinition[]) {
+    const typeAliases: TSCode.TypeAliasDefinition[] = [];
+
+    types.forEach(typeDef => {
+        typeDef.definitions.forEach(def => {
+            if (def instanceof TSCode.TypeAliasDefinition)
+                typeAliases.push(def);
+        });
+    });
+
+    return typeAliases;
 }
 
 function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {

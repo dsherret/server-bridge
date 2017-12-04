@@ -18,10 +18,10 @@ export class TypesDictionary {
 
     private addDependentTypes(type: TSCode.TypeDefinition) {
         type.definitions.forEach(def => {
-            if (def.isClassDefinition() || def.isInterfaceDefinition()) {
+            if (def instanceof TSCode.ClassDefinition || def instanceof TSCode.InterfaceDefinition) {
                 def.extendsTypes.forEach(e => this.add(e));
 
-                if (def.isClassDefinition()) {
+                if (def instanceof TSCode.ClassDefinition) {
                     def.implementsTypes.forEach(i => this.add(i));
                 }
 

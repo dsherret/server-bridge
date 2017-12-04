@@ -22,7 +22,7 @@ export class InterfaceFromTypeGenerator {
             isExported: true
         });
 
-        if (def.isInterfaceDefinition() || def.isClassDefinition()) {
+        if (def instanceof TSCode.InterfaceDefinition || def instanceof TSCode.ClassDefinition) {
             def.properties.forEach(prop => {
                 interfaceDef.addProperty({
                     name: prop.name,
@@ -35,7 +35,7 @@ export class InterfaceFromTypeGenerator {
                 interfaceDef.addExtends(e.text);
             });
 
-            if (def.isClassDefinition()) {
+            if (def instanceof TSCode.ClassDefinition) {
                 def.implementsTypes.forEach(i => {
                     interfaceDef.addExtends(i.text);
                 });

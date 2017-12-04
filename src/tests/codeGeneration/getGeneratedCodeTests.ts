@@ -12,7 +12,7 @@ import {ClientBase} from "server-bridge-superagent-client";
 export interface INoteRoutes {
     getMethod(noteID: number): Promise<number>;
     postMethod(note: Note): Promise<number>;
-    postAliasMethod(alias: { myAliasProp: TypeAliasReferencedInterface; }): Promise<void>;
+    postAliasMethod(alias: TypeAlias): Promise<void>;
 }
 
 export interface IRoutesWithoutUse {
@@ -47,7 +47,7 @@ export interface MyClass extends BaseClass {
 
 export interface BaseClass extends BaseInterface<string> {
     baseProp: string;
-    objectTypeAlias: { name: string; other?: ObjectTypeAliasReferencedInterface; };
+    objectTypeAlias: ObjectTypeAlias;
 }
 
 export interface ObjectTypeAliasReferencedInterface {
@@ -63,6 +63,9 @@ export enum Status {
     Disabled = 1
 }
 
+export type ObjectTypeAlias = { name: string; other?: ObjectTypeAliasReferencedInterface; };
+export type TypeAlias = { myAliasProp: TypeAliasReferencedInterface; };
+
 export class NoteRoutes extends ClientBase implements INoteRoutes {
     constructor(options?: { urlPrefix: string; }) {
         super((options == null ? "" : (options.urlPrefix || "")) + "/notes");
@@ -76,7 +79,7 @@ export class NoteRoutes extends ClientBase implements INoteRoutes {
         return super.post<number>("/", note);
     }
 
-    postAliasMethod(alias: { myAliasProp: TypeAliasReferencedInterface; }) {
+    postAliasMethod(alias: TypeAlias) {
         return super.post<void>("/postAliasMethod", alias);
     }
 }
