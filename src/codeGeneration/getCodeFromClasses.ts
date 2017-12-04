@@ -56,9 +56,10 @@ export function getCodeFromClasses(options: Options) {
     });
 
     const referencedTypes = types.getTypes();
-    fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
-    fileForWrite.enums.push(...getEnumsFromTypes(referencedTypes));
-    fileForWrite.typeAliases.push(...getTypeAliasesFromTypes(referencedTypes));
+    const {interfaces, typeAliases, enums} = getDefinitionsFromTypes(referencedTypes);
+    fileForWrite.interfaces.push(...interfaces);
+    fileForWrite.enums.push(...enums);
+    fileForWrite.typeAliases.push(...typeAliases);
     fileForWrite.interfaces.forEach((def, i) => {
         fileForWrite.setOrderOfMember(i, def);
     });
@@ -128,41 +129,30 @@ function getReturnType(method: TSCode.ClassMethodDefinition) {
     return stripPromiseFromString(method.returnType.text);
 }
 
-function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
+function getDefinitionsFromTypes(types: TSCode.TypeDefinition[]) {
     const interfaceFromTypeGenerator = new InterfaceFromTypeGenerator();
     const interfaces: TSCode.InterfaceDefinition[] = [];
-
-    types.filter(typeDef => !typeDef.definitions.some(t => t instanceof TSCode.EnumDefinition || t instanceof TSCode.TypeAliasDefinition)).forEach(typeDef => {
-        interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
-    });
-
-    return interfaces;
-}
-
-function getEnumsFromTypes(types: TSCode.TypeDefinition[]) {
     const enums: TSCode.EnumDefinition[] = [];
-
-    types.forEach(typeDef => {
-        typeDef.definitions.forEach(def => {
-            if (def instanceof TSCode.EnumDefinition)
-                enums.push(def);
-        });
-    });
-
-    return enums;
-}
-
-function getTypeAliasesFromTypes(types: TSCode.TypeDefinition[]) {
     const typeAliases: TSCode.TypeAliasDefinition[] = [];
 
     types.forEach(typeDef => {
-        typeDef.definitions.forEach(def => {
-            if (def instanceof TSCode.TypeAliasDefinition)
+        let found = false;
+        for (const def of typeDef.definitions) {
+            if (def instanceof TSCode.EnumDefinition) {
+                enums.push(def);
+                found = true;
+            }
+            else if (def instanceof TSCode.TypeAliasDefinition) {
                 typeAliases.push(def);
-        });
+                found = true;
+            }
+        }
+
+        if (!found)
+            interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
     });
 
-    return typeAliases;
+    return {interfaces, enums, typeAliases};
 }
 
 function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {
