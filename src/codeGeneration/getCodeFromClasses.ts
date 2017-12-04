@@ -57,8 +57,12 @@ export function getCodeFromClasses(options: Options) {
 
     const referencedTypes = types.getTypes();
     fileForWrite.interfaces.push(...getInterfacesFromTypes(referencedTypes));
+    fileForWrite.enums.push(...getEnumsFromTypes(referencedTypes));
     fileForWrite.interfaces.forEach((def, i) => {
         fileForWrite.setOrderOfMember(i, def);
+    });
+    fileForWrite.enums.forEach((def, i) => {
+        fileForWrite.setOrderOfMember(fileForWrite.interfaces.length + i, def);
     });
 
     return fileForWrite.write();
@@ -124,11 +128,24 @@ function getInterfacesFromTypes(types: TSCode.TypeDefinition[]) {
     const interfaceFromTypeGenerator = new InterfaceFromTypeGenerator();
     const interfaces: TSCode.InterfaceDefinition[] = [];
 
-    types.forEach(typeDef => {
+    types.filter(typeDef => !typeDef.definitions.some(t => t.isEnumDefinition())).forEach(typeDef => {
         interfaces.push(...interfaceFromTypeGenerator.getInterfacesFromType(typeDef));
     });
 
     return interfaces;
+}
+
+function getEnumsFromTypes(types: TSCode.TypeDefinition[]) {
+    const enums: TSCode.EnumDefinition[] = [];
+
+    types.forEach(typeDef => {
+        typeDef.definitions.forEach(def => {
+            if (def.isEnumDefinition())
+                enums.push(def);
+        });
+    });
+
+    return enums;
 }
 
 function verifyMethodHasParameterNames(method: TSCode.ClassMethodDefinition, paramNames: string[]) {

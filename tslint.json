@@ -11,7 +11,7 @@
             true,
             "check-space"
         ],
-        "curly": true,
+        "curly": false,
         "eofline": true,
         "forin": true,
         "indent": [ true, "spaces" ],

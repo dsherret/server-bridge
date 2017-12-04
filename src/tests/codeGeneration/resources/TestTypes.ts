@@ -5,6 +5,7 @@ export interface Note extends BaseInterface<TypeArgInterface> {
 export interface Note {
     declarationMerging: string;
     myClass: MyClass;
+    status: Status;
 }
 
 export interface BaseInterface<T> {
@@ -43,4 +44,9 @@ export type TypeAlias = {
 
 export interface TypeAliasReferencedInterface {
     prop: string;
+}
+
+export enum Status {
+    Enabled,
+    Disabled
 }
